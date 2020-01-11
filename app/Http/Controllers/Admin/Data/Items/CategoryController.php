@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin\Data\Items;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Request;
 
-class UnitsController extends Controller
+class CategoryController extends Controller
 {
 
     /**
@@ -26,7 +26,7 @@ class UnitsController extends Controller
     public function index(Request $request)
     {
 
-        return view('admin.item-mgmt.units.index');
+        return view('admin.item-mgmt.categories.index');
     }
 
     /**
@@ -92,4 +92,5 @@ class UnitsController extends Controller
         //         ->route('admin.general.maritals.index')
         //         ->with('success', 'Marital status delete successfully');
     }
+
 }

@@ -65,6 +65,22 @@ class AppSettingSeeder extends Seeder
                 'key' => 'site_db_last_backup',
                 'value' => 'NOT_SET'
             ],
+            [
+                'key' => 'site_auth_registration',
+                'value' => 1
+            ],
+            [
+                'key' => 'site_auth_password_reset',
+                'value' => 1
+            ],
+            [
+                'key' => 'site_auth_email_verify',
+                'value' => 1
+            ],
+            [
+                'key' => 'site_new_user_role',
+                'value' => 3
+            ],
         ];
 
         foreach ($data as $setting) {

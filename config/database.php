@@ -61,6 +61,13 @@ return [
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
+            'dump' => [
+                // 'dump_binary_path' => '/Applications/MAMP/Library/bin/', // only the path, so without `mysqldump` or `pg_dump`; this is a working example from MAMP on Mac OS
+                'use_single_transaction',
+                'timeout' => 60 * 5, // 5 minute timeout
+                // 'exclude_tables' => ['table1', 'table2'],
+                'add_extra_option' => '--column-statistics=0',
+            ]
         ],
 
         'pgsql' => [

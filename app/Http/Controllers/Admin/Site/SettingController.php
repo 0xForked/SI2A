@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Site;
 
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
@@ -42,7 +43,8 @@ class SettingController extends Controller
             }
         }
         $backups = array_reverse($backups);
-        return view('admin.settings.app-setting', compact('settings', 'backups'));
+        $roles = Role::all();
+        return view('admin.settings.app-setting', compact('settings', 'backups', 'roles'));
     }
 
     /**
@@ -115,6 +117,58 @@ class SettingController extends Controller
                 $setting->save();
             }
         }
+        return redirect()->back()->with('success', 'Action success with out errors');
+    }
+
+    public function updateAuthData(Request $request)
+    {
+        $data = (Object)$request->only(
+            'site_auth_password_reset',
+            'site_auth_registration',
+            'site_auth_email_verify',
+            'site_new_user_role'
+        );
+
+        if(isset($data->site_auth_password_reset)) {
+            $setting = Setting::where('key', 'site_auth_password_reset')->first();
+            $setting->value = 1;
+            $setting->save();
+        } else {
+            $setting = Setting::where('key', 'site_auth_password_reset')->first();
+            $setting->value = 0;
+            $setting->save();
+        }
+
+        if(isset($data->site_auth_registration)) {
+            $setting = Setting::where('key', 'site_auth_registration')->first();
+            $setting->value = 1;
+            $setting->save();
+        } else {
+            $setting = Setting::where('key', 'site_auth_registration')->first();
+            $setting->value = 0;
+            $setting->save();
+        }
+
+        if(isset($data->site_auth_email_verify)) {
+            $setting = Setting::where('key', 'site_auth_email_verify')->first();
+            $setting->value = 1;
+            $setting->save();
+        } else {
+            $setting = Setting::where('key', 'site_auth_email_verify')->first();
+            $setting->value = 0;
+            $setting->save();
+        }
+
+        if (isset($data->site_new_user_role)) {
+            $setting = Setting::where('key', 'site_new_user_role')->first();
+            $setting->value = $data->site_new_user_role;
+            $setting->save();
+        } else {
+            $setting = Setting::where('key', 'site_new_user_role')->first();
+            $setting->value = 3;
+            $setting->save();
+        }
+
         return redirect()->back()->with('success', 'Action success with out errors');
     }
 

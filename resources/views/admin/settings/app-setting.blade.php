@@ -45,6 +45,17 @@
                                 class="nav-link"
                                 data-toggle="pill"
                                 role="tab"
+                                id="pills-auth-tab"
+                                href="#pills-auth"
+                                aria-controls="pills-auth"
+                                aria-selected="true"
+                            >Otentikasi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                class="nav-link"
+                                data-toggle="pill"
+                                role="tab"
                                 id="pills-backup-tab"
                                 href="#pills-backup"
                                 aria-controls="pills-backup"
@@ -227,6 +238,93 @@
                     </form>
                 </div>
 
+                <div
+                    class="tab-pane fade"
+                    id="pills-auth"
+                    role="tabpanel"
+                    aria-labelledby="pills-auth-tab">
+                    <form id="setting-form" action="{{route('admin.app.setting.auth')}}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div class="card" id="settings-card">
+                            <div class="card-header">
+                                <h4>Pengaturan Otentikasi</h4>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted">
+                                    Pengaturan Otentikasi untuk mengaktifkan atau menonaktifkan Pedaftaran, Reset Password dan Email Verifikasi
+                                </p>
+                                <div class="form-group">
+                                    <div class="control-label ml-3">Pengaturan Ulang Kata Sandi</div>
+                                    <label class="custom-switch mt-2">
+                                        <input type="checkbox" name="site_auth_password_reset" class="custom-switch-input" {{ (app_settings()['site_auth_password_reset']->value) ? 'checked' : '' }}>
+                                        <span class="custom-switch-indicator"></span>
+                                        <span class="custom-switch-description">
+                                            @if (app_settings()['site_auth_password_reset']->value)
+                                                Pengaturan ulang kata sandi diaktifkan
+                                            @else
+                                                Pengaturan ulang kata sandi dinonaktifkan
+                                            @endif
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <div class="control-label ml-3">Pendaftaran Pengguna Baru</div>
+                                    <label class="custom-switch mt-2">
+                                        <input type="checkbox" name="site_auth_registration" class="custom-switch-input" {{ (app_settings()['site_auth_registration']->value) ? 'checked' : '' }}>
+                                        <span class="custom-switch-indicator"></span>
+                                        <span class="custom-switch-description">
+                                            @if (app_settings()['site_auth_registration']->value)
+                                                Pendaftaran pengguna baru diaktifkan
+                                            @else
+                                                Pendaftaran pengguna baru dinonaktifkan
+                                            @endif
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <div class="control-label ml-3">Verifikasi Email Pengguna Baru</div>
+                                    <label class="custom-switch mt-2">
+                                        <input type="checkbox" name="site_auth_email_verify" class="custom-switch-input" {{ (app_settings()['site_auth_email_verify']->value) ? 'checked' : '' }}>
+                                        <span class="custom-switch-indicator"></span>
+                                        <span class="custom-switch-description">
+                                            @if (app_settings()['site_auth_email_verify']->value)
+                                                Verifikasi email untuk pengguna baru diaktifkan
+                                            @else
+                                                Verifikasi email untuk pengguna baru dinonaktifkan
+                                            @endif
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <div class="control-label ml-3">Peran Pengguna Baru</div>
+                                    @foreach ($roles as $role)
+                                        <div class="custom-control custom-radio ml-5">
+                                            <input
+                                                type="radio"
+                                                id="role{{ $role->id }}"
+                                                value="{{ $role->id }}"
+                                                name="site_new_user_role"
+                                                class="custom-control-input"
+                                                {{ ((int)app_settings()['site_new_user_role']->value === $role->id) ? 'checked' : ''}}
+                                            >
+                                            <label
+                                            class="custom-control-label"
+                                            for="role{{ $role->id }}"
+                                            >
+                                                {{ $role->name }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="card-footer bg-whitesmoke text-md-right">
+                                <button onclick="showLoading()" type="submit" class="btn btn-primary" id="save-btn">Save Changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
 
                 <div
                     class="tab-pane fade"
@@ -334,12 +432,12 @@
                                                     @method('PUT')
                                                     <div class="input-group">
                                                         <div class="custom-file text-left" style="margin-top:20px">
-                                                            <input type="file" name="site_database" class="custom-file-input" id="site-database">
+                                                            <input type="file" name="site_database" class="custom-file-input" id="site-database" disabled>
                                                             <label class="custom-file-label" id="site-database-label">Choose</label>
                                                         </div>
                                                     </div>
                                                     <span class="input-group-btn">
-                                                        <button onclick="" type="submit" class="btn btn-primary mt-4 ml-2">Mulai Proses Restorasi</button>
+                                                        <button onclick="" type="submit" class="btn btn-primary mt-4 ml-2" disabled>Mulai Proses Restorasi</button>
                                                     </span>
                                                 </form>
                                                 <a href="#" class="mt-4 bb">Butuh bantuan?</a>

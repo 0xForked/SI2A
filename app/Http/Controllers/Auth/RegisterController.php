@@ -36,7 +36,7 @@ class RegisterController extends Controller
      *
      * @var Array Int
      */
-    protected $staffRoleId = [2];
+    protected $roleSelected;
 
     /**
      * Create a new controller instance.
@@ -46,6 +46,7 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+        $this->roleSelected = [(int)app_settings()['site_new_user_role']->value];
     }
 
     /**
@@ -78,6 +79,6 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-        return $user->assignRole($this->staffRoleId);
+        return $user->assignRole($this->roleSelected);
     }
 }

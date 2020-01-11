@@ -70,9 +70,11 @@
                             </button>
                         </div>
 
-                        <div class="mt-5 text-center">
-                            Belum punya akun? <a onclick="showLoading()" href="{{ route('register') }}">Buat baru</a>
-                        </div>
+                        @if (Route::has('register'))
+                            <div class="mt-5 text-center">
+                                Belum punya akun? <a onclick="showLoading()" href="{{ route('register') }}">Buat baru</a>
+                            </div>
+                        @endif
                     </form>
                     @include('auth.items.footer-nav')
                 </div>
