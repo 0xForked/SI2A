@@ -15,40 +15,62 @@
                 </a>
             </li>
             <li class="menu-header">FITUR</li>
-            <li class="">
+            {{-- <li class="">
                 <a class="nav-link" href="">
-                    <i class="fas fa-columns"></i>
+                    <i class="fas fa-clipboard-check"></i>
                     <span>Konfirmasi</span>
                 </a>
-            </li>
-            <li class="">
-                <a class="nav-link" href="">
-                    <i class="fas fa-columns"></i>
-                    <span>Transaksi</span>
-                </a>
-            </li>
-
-            <li class="menu-header">LAPORAN</li>
-            {{-- <li class="nav-item dropdown">
+            </li>--}}
+            <li class="nav-item dropdown">
                 <a href="#" class="nav-link has-dropdown">
-                    <i class="fas fa-users"></i>
-                    <span>Barang</span>
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <span>Transaksi</span>
                 </a>
                 <ul class="dropdown-menu">
                     <li class="">
-                        <a class="nav-link" href="">Item</a>
+                        <a class="nav-link" href="">Pembelian</a>
                     </li>
                     <li class="">
-                        <a class="nav-link" href="">Satuan</a>
+                        <a class="nav-link" href="">Penjualan</a>
                     </li>
                 </ul>
-            </li> --}}
+            </li>
+
+            <li class="menu-header">LAPORAN</li>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link has-dropdown">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span>Transaksi</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="">
+                        <a class="nav-link" href="">Pembelian</a>
+                    </li>
+                    <li class="">
+                        <a class="nav-link" href="">Penjualan</a>
+                    </li>
+                </ul>
+            </li>
+
             <li class="menu-header">DATA</li>
+            <li class="">
+                <a class="nav-link" href="">
+                    <i class="fas fa-users"></i>
+                    <span>Pelanggan</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="nav-link" href="">
+                    <i class="fas fa-truck"></i>
+                    <span>Pemasok</span>
+                </a>
+            </li>
             <li class="nav-item dropdown {{
                 (
                     Route::is('admin.items.products.*')
                     || Route::is('admin.items.units.*')
                     || Route::is('admin.items.categories.*')
+                    || Route::is('admin.items.subcategories.*')
                 ) ? 'active' : ''
             }}">
                 <a href="#" class="nav-link has-dropdown">
@@ -65,6 +87,9 @@
                     <li class="{{ Route::is('admin.items.categories.*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('admin.items.categories.index') }}">Kategori</a>
                     </li>
+                    <li class="{{ Route::is('admin.items.subcategories.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('admin.items.subcategories.index') }}">Subkategori</a>
+                    </li>
                 </ul>
             </li>
             <li class="nav-item dropdown {{
@@ -76,7 +101,7 @@
             }}
             ">
                 <a href="#" class="nav-link has-dropdown">
-                    <i class="fas fa-users"></i>
+                    <i class="fas fa-users-cog"></i>
                     <span>Pengguna</span>
                 </a>
                 <ul class="dropdown-menu">

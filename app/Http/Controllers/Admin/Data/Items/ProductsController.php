@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Admin\Data\Items;
 
+use App\Models\Data\Product;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Request;
 
 class ProductsController extends Controller
 {
@@ -25,8 +26,21 @@ class ProductsController extends Controller
      */
     public function index(Request $request)
     {
+        $products = Product::with('unit')->with(['subcategory' => function($query) {
+            $query->with('category');
+        }])->paginate(5);
 
-        return view('admin.item-mgmt.products.index');
+        if ($request->search_key && $request->search_value) {
+            $products = Product::with('unit')->with(['subcategory' => function($query) {
+                $query->with('category');
+            }])->where(
+                "$request->search_key",
+                'LIKE',
+                "%$request->search_value%"
+            )->paginate(5);
+        }
+
+        return view('admin.item-mgmt.products.index', compact('products'));
     }
 
     /**

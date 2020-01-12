@@ -10,7 +10,7 @@
     >
         <form
             method="POST"
-            action=""
+            action="{{ route('admin.items.units.update') }}"
             id="formEditUnit"
         >
             @csrf

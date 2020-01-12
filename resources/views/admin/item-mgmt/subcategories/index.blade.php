@@ -1,11 +1,11 @@
 @extends('layouts._body.admin')
 
-@section('title', 'Barang - Unit')
+@section('title', 'Barang - Subkategori')
 
 @section('content')
 <div class="section-body">
-    <h2 class="section-title">Unit</h2>
-    <p class="section-lead">Daftar Unit barang.</p>
+    <h2 class="section-title">Subkategori</h2>
+    <p class="section-lead">Daftar Subkategori Barang.</p>
     @include('layouts._part.flash')
 
     <div class="row">
@@ -17,7 +17,7 @@
                 <div class="card-body">
                     <form
                         method="post"
-                        action="{{ route('admin.items.units.store') }}"
+                        action="{{ route('admin.items.subcategories.store') }}"
                     >
                         @csrf
                         <div class="form-group">
@@ -27,6 +27,14 @@
                         <div class="form-group">
                             <label>Deskripsi</label>
                             <textarea class="form-control h-auto" name="description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Kategori</label>
+                            <select class="form-control" name="category_id">
+                                @foreach ($categories as $category)
+                                    <option value="{{$category->id}}">{{$category->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <button
                             onclick="showLoading()"
@@ -42,7 +50,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h4>Daftar Unit Barang</h4>
+                    <h4>Daftar Subkategori Barang</h4>
                     <div class="card-header-form">
                         <form
                             method="GET"
@@ -72,33 +80,45 @@
                                 <th class="text-center">#</th>
                                 <th>Nama</th>
                                 <th>Deskripsi</th>
+                                <th>Kategori</th>
+                                <th>Total Produk</th>
                                 <th width="200">Aksi</th>
                             </tr>
-                            @foreach ($units as $unit)
+                            @foreach ($subcategories as $subcategory)
                                 <tr>
                                     <td class="text-center">
-                                        {{ ($units->currentpage()-1) * $units->perpage() + $loop->iteration }}
+                                        {{ ($subcategories->currentpage()-1) * $subcategories->perpage() + $loop->iteration }}
                                     </td>
                                     <td>
-                                        {{ $unit->name }}
+                                        {{ $subcategory->name }}
                                     </td>
                                     <td>
-                                        {{ $unit->description }}
+                                        {{ $subcategory->description }}
+                                    </td>
+                                    <td>
+                                        @if ($subcategory->category)
+                                            <a href="{{ route('admin.items.categories.index') }}?search={{ $subcategory->category->name }}">
+                                                {{ $subcategory->category->name }}
+                                            </a>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        {{ $subcategory->products_count }}
                                     </td>
                                     <td>
                                         <a
                                             href="#"
                                             class="btn btn-warning"
-                                            onclick="showUnit({{ $unit->id }})"
+                                            onclick="showSubcategory({{ $subcategory->id }})"
                                             data-toggle="modal"
-                                            data-target="#editUnit"
+                                            data-target="#editSubcategory"
                                         >
                                             <i class="fas fa-edit"></i> Ubah
                                         </a>
                                         <a
                                             href="#"
                                             class="btn btn-danger"
-                                            onclick="deleteData({{ $unit->id }}, 'units')"
+                                            onclick="deleteData({{ $subcategory->id }}, 'subcategories')"
                                             data-toggle="modal"
                                             data-target="#deleteModal"
                                         >
@@ -113,7 +133,7 @@
                 <div class="card-footer bg-whitesmoke text-center">
                     <nav class="d-inline-block">
                         <ul class="pagination mb-0">
-                            {{ $units->links() }}
+                            {{ $subcategories->links() }}
                         </ul>
                     </nav>
                 </div>
@@ -124,9 +144,9 @@
 @endsection
 
 @section('custom-include')
-@include('admin.item-mgmt.units.edit')
+@include('admin.item-mgmt.subcategories.edit')
 @endsection
 
 @section('custom-script')
-@include('admin.item-mgmt.units.script')
+@include('admin.item-mgmt.subcategories.script')
 @endsection

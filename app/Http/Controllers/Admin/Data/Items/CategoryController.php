@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Admin\Data\Items;
 
+use Illuminate\Http\Request;
+use App\Models\Data\Category;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Request;
 
 class CategoryController extends Controller
 {
@@ -25,8 +26,17 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
+        $categories = Category::withCount('subcategories')->paginate(5);
 
-        return view('admin.item-mgmt.categories.index');
+        if ($request->search) {
+            $categories = Category::withCount('subcategories')->where(
+                'name',
+                'LIKE',
+                "%$request->search%"
+            )->paginate(5);
+        }
+
+        return view('admin.item-mgmt.categories.index', compact('categories'));
     }
 
     /**
@@ -37,7 +47,8 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $categories = Category::findOrFail($id);
+        return response()->json($categories);
     }
 
     /**
@@ -48,16 +59,16 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        // $this->validate($request, [
-        //     'name' => 'required',
-        //     'description' => 'required',
-        // ]);
-        // $marital = $request->only('name', 'description');
-        // $action = Marital::create($marital);
-        // if (!$action) {
-        //     return redirect()->back()->with('error','Failed add new Marital Status');
-        // }
-        // return redirect()->back()->with('success','Marital status created successfully');
+        $this->validate($request, [
+            'name' => 'required',
+            'description' => 'required',
+        ]);
+        $categories = $request->only('name', 'description');
+        $action = Category::create($categories);
+        if (!$action) {
+            return redirect()->back()->with('error','Failed add new Category');
+        }
+        return redirect()->back()->with('success','Category created successfully');
     }
 
     /**
@@ -69,14 +80,14 @@ class CategoryController extends Controller
      */
     public function update(Request $request)
     {
-        // $this->validate($request, [
-        //     'name' => 'required',
-        // ]);
-        // $marital = Marital::findOrFail($request->id);
-        // $marital->name = $request->name;
-        // $marital->description = $request->description;
-        // $marital->save();
-        // return redirect()->back()->with('success','Marital status updated successfully');
+        $this->validate($request, [
+            'name' => 'required',
+        ]);
+        $categories = Category::findOrFail($request->id);
+        $categories->name = $request->name;
+        $categories->description = $request->description;
+        $categories->save();
+        return redirect()->back()->with('success','Category updated successfully');
     }
 
     /**
@@ -87,10 +98,10 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        // Marital::findOrFail($id)->delete();
-        // return redirect()
-        //         ->route('admin.general.maritals.index')
-        //         ->with('success', 'Marital status delete successfully');
+        Category::findOrFail($id)->delete();
+        return redirect()
+                ->route('admin.items.categories.index')
+                ->with('success', 'Category delete successfully');
     }
 
 }

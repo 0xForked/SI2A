@@ -85,15 +85,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             Route::resource('products', 'ProductsController')
             ->only(['index', 'create', 'store', 'edit', 'update']);
+            Route::get('/products/{id}/delete', 'ProductsController@destroy');
 
             Route::resource('categories', 'CategoryController')
             ->only(['index', 'show', 'store']);
             Route::put('/categories', 'CategoryController@update')->name('categories.update');
             Route::get('/categories/{id}/delete', 'CategoryController@destroy');
 
+            Route::resource('subcategories', 'SubcategoriesController')
+            ->only(['index', 'show', 'store']);
+            Route::put('/subcategories', 'SubcategoriesController@update')->name('subcategories.update');
+            Route::get('/subcategories/{id}/delete', 'SubcategoriesController@destroy');
+
             Route::resource('units', 'UnitsController')
             ->only(['index', 'show', 'store']);
-            Route::put('/units', 'UnitsController@update')->name('categories.update');
+            Route::put('/units', 'UnitsController@update')->name('units.update');
             Route::get('/units/{id}/delete', 'UnitsController@destroy');
         });
 

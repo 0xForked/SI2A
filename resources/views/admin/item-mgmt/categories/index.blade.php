@@ -17,7 +17,7 @@
                 <div class="card-body">
                     <form
                         method="post"
-                        action=""
+                        action="{{ route('admin.items.categories.store') }}"
                     >
                         @csrf
                         <div class="form-group">
@@ -72,9 +72,10 @@
                                 <th class="text-center">#</th>
                                 <th>Nama</th>
                                 <th>Deskripsi</th>
+                                <th>Total Subkategori</th>
                                 <th width="200">Aksi</th>
                             </tr>
-                            {{-- @foreach ($categories as $category)
+                            @foreach ($categories as $category)
                                 <tr>
                                     <td class="text-center">
                                         {{ ($categories->currentpage()-1) * $categories->perpage() + $loop->iteration }}
@@ -86,12 +87,15 @@
                                         {{ $category->description }}
                                     </td>
                                     <td>
+                                        {{ $category->subcategories_count }}
+                                    </td>
+                                    <td>
                                         <a
                                             href="#"
                                             class="btn btn-warning"
-                                            onclick="showMarital({{ $category->id }})"
+                                            onclick="showCategory({{ $category->id }})"
                                             data-toggle="modal"
-                                            data-target="#editMarital"
+                                            data-target="#editCategory"
                                         >
                                             <i class="fas fa-edit"></i> Ubah
                                         </a>
@@ -106,14 +110,14 @@
                                         </a>
                                     </td>
                                 </tr>
-                            @endforeach --}}
+                            @endforeach
                         </table>
                     </div>
                 </div>
                 <div class="card-footer bg-whitesmoke text-center">
                     <nav class="d-inline-block">
                         <ul class="pagination mb-0">
-                            {{-- {{ $categories->links() }} --}}
+                            {{ $categories->links() }}
                         </ul>
                     </nav>
                 </div>
@@ -128,5 +132,5 @@
 @endsection
 
 @section('custom-script')
-{{-- @include('admin.item-mgmt.categories.script') --}}
+@include('admin.item-mgmt.categories.script')
 @endsection

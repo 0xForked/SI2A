@@ -2,7 +2,7 @@
     class="modal fade"
     tabindex="-1"
     role="dialog"
-    id="editCategory"
+    id="editSubcategory"
 >
     <div
         class="modal-dialog"
@@ -10,15 +10,15 @@
     >
         <form
             method="POST"
-            action="{{ route('admin.items.categories.update') }}"
-            id="formEditCategory"
+            action="{{ route('admin.items.subcategories.update') }}"
+            id="formEditSubcategory"
         >
             @csrf
             @method('PUT')
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">
-                        Perbaharui Kategori Barang!
+                        Perbaharui Subkategori Barang!
                     </h5>
                 </div>
                 <div class="modal-body">
@@ -30,6 +30,14 @@
                     <div class="form-group">
                         <label>Deskripsi</label>
                         <textarea class="form-control h-auto" name="description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Kabupaten/Kota</label>
+                        <select class="form-control" name="category_id">
+                            @foreach ($categories as $category)
+                                <option value="{{$category->id}}">{{$category->name}}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -45,7 +53,7 @@
                     </button>
 
                     <button
-                        onclick="updateProcess('editCategory')"
+                        onclick="updateProcess('editSubcategory')"
                         type="submit"
                         class="btn btn-primary"
                     >

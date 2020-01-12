@@ -1,18 +1,18 @@
 <script type="text/javascript">
     $('input[type=search]').on('search', function () {
         if($(this).val().length < 1){
-            window.location='{{ route('admin.general.maritals.index') }}'
+            window.location='{{ route('admin.items.units.index') }}'
         }
     });
-    function showMarital(id) {
-        var route = `{{ route('admin.general.maritals.index') }}/${id}`
+    function showUnit(id) {
+        var route = `{{ route('admin.items.units.index') }}/${id}`
         $.ajax({
             type: 'GET',
             url: route,
             success: function(data) {
-                $("#formEditMarital input[name=id]").val(data.id);
-                $("#formEditMarital input[name=name]").val(data.name);
-                $("#formEditMarital textarea[name=description]").val(data.description);
+                $("#formEditUnit input[name=id]").val(data.id);
+                $("#formEditUnit input[name=name]").val(data.name);
+                $("#formEditUnit textarea[name=description]").val(data.description);
             },
             error: function(data) {
                 console.log(data);

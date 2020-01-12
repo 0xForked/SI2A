@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin\Data\Items;
 
-use App\Models\Data\Unit;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Data\Category;
+use App\Models\Data\Subcategory;
+use App\Http\Controllers\Controller;
 
-class UnitsController extends Controller
+class SubcategoriesController extends Controller
 {
 
     /**
@@ -26,19 +27,19 @@ class UnitsController extends Controller
      */
     public function index(Request $request)
     {
-        $units = Unit::paginate(5);
+        $categories = Category::all();
 
+        $subcategories = Subcategory::with('category')->withCount('products')->paginate(5);
         if ($request->search) {
-            $units = Unit::where(
+            $subcategories = Subcategory::with('category')->withCount('products')->where(
                 'name',
                 'LIKE',
                 "%$request->search%"
             )->paginate(5);
         }
 
-        return view('admin.item-mgmt.units.index', compact('units'));
+        return view('admin.item-mgmt.subcategories.index', compact('categories', 'subcategories'));
     }
-
 
     /**
      * Display the specified resource.
@@ -48,8 +49,8 @@ class UnitsController extends Controller
      */
     public function show($id)
     {
-        $unit = Unit::findOrFail($id);
-        return response()->json($unit);
+        $subcategory = Subcategory::findOrFail($id);
+        return response()->json($subcategory);
     }
 
     /**
@@ -62,14 +63,13 @@ class UnitsController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'description' => 'required',
         ]);
-        $unit = $request->only('name', 'description');
-        $action = Unit::create($unit);
+        $subcategory = $request->only('name', 'description', 'category_id');
+        $action = Subcategory::create($subcategory);
         if (!$action) {
-            return redirect()->back()->with('error','Failed add new Unit');
+            return redirect()->back()->with('error','Failed add new Subcategory');
         }
-        return redirect()->back()->with('success','Unit created successfully');
+        return redirect()->back()->with('success','Subcategory created successfully');
     }
 
     /**
@@ -84,11 +84,12 @@ class UnitsController extends Controller
         $this->validate($request, [
             'name' => 'required',
         ]);
-        $unit = Unit::findOrFail($request->id);
-        $unit->name = $request->name;
-        $unit->description = $request->description;
-        $unit->save();
-        return redirect()->back()->with('success','Unit updated successfully');
+        $subcategory = Subcategory::findOrFail($request->id);
+        $subcategory->name = $request->name;
+        $subcategory->description = $request->description;
+        $subcategory->category_id = $request->category_id;
+        $subcategory->save();
+        return redirect()->back()->with('success','Subcategory updated successfully');
     }
 
     /**
@@ -99,9 +100,10 @@ class UnitsController extends Controller
      */
     public function destroy($id)
     {
-        Unit::findOrFail($id)->delete();
+        Subcategory::findOrFail($id)->delete();
         return redirect()
-                ->route('admin.items.units.index')
-                ->with('success', 'Marital status delete successfully');
+                ->route('admin.items.subcategories.index')
+                ->with('success', 'Subcategory delete successfully');
     }
+
 }

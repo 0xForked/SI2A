@@ -15,73 +15,94 @@
                     <div class="card-header-form">
                         <form
                             method="GET"
-                            action=""
+                            action="{{ route('admin.items.products.store') }}"
                         >
                             <div class="input-group">
+                                <select name="search_key" class="form-control" style="font-size:12px; height:40px" >
+                                    <option>SKU</option>
+                                    <option>NAMA</option>
+                                </select>
+
                                 <input
                                     type="search"
-                                    class="form-control"
-                                    placeholder="Cari"
-                                    name="search"
+                                    class="form-control ml-3"
+                                    placeholder="Kata kunci"
+                                    name="search_value"
+                                    style="height:40px"
                                     value="{{ (app('request')->input('search')) ? app('request')->input('search') : ''}}"
                                 >
+
                                 <div class="input-group-btn">
-                                    <button class="btn btn-primary" value="search">
+                                    <button class="btn btn-primary" value="search" style="height:40px">
                                         <i class="fas fa-search"></i>
                                     </button>
                                 </div>
                             </div>
                         </form>
                     </div>
-                    <button class="btn btn-primary ml-2" onClick="window.location='{{ route('admin.users.create') }}'"><i class="fas fa-plus"></i> Tambah baru</button>
+                    <button class="btn btn-primary ml-2" style="height:40px" onClick="window.location=''"><i class="fas fa-plus"></i> Tambah baru</button>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-bordered table-md">
                             <tr>
                                 <th class="text-center">#</th>
+                                <th>SKU</th>
+                                <th>Bets</th>
                                 <th>Nama</th>
-                                <th>Harga/Satuan</th>
+                                <th>Harga (Satuan)</th>
                                 <th>Stok</th>
+                                <th>Kategori -> Subkategori</th>
+                                <th>Kadaluarsa</th>
                                 <th>Status</th>
                                 <th width="300">Aksi</th>
                             </tr>
-                            {{-- @foreach ($users as $user)
+                            @foreach ($products as $product)
                                 <tr>
                                     <td class="text-center">
-                                        {{ ($users->currentpage()-1) * $users->perpage() + $loop->iteration }}
+                                        {{ ($products->currentpage()-1) * $products->perpage() + $loop->iteration }}
                                     </td>
-                                    <td>{{ $user->username }}</td>
-                                    <td>{{ $user->name }}</td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>{{ $user->phone }}</td>
+                                    <td>{{ $product->sku }}</td>
+                                    <td>{{ $product->bets_number }}</td>
+                                    <td>{{ $product->name }}</td>
+                                    <td>Rp. {{ $product->price }},- ({{ $product->unit->name }}) </td>
+                                    <td>{{ $product->stock }}</td>
                                     <td>
-                                        <div class="badge badge-light">
-                                            {{ $user->getRoleNames()->first() }}
-                                        </div>
+                                        @if ($product->subcategory->category->name)
+                                            <a href="{{ route('admin.items.categories.index') }}?search={{ $product->subcategory->category->name }}">
+                                                {{ $product->subcategory->category->name }}
+                                            </a>
+                                        @endif
+                                        ->
+                                        @if ($product->subcategory->name)
+                                            <a href="{{ route('admin.items.subcategories.index') }}?search={{ $product->subcategory->name }}">
+                                                {{ $product->subcategory->name }}
+                                            </a>
+                                        @endif
                                     </td>
+                                    <td>{{ $product->expired_date }}</td>
                                     <td>
                                         <a
                                             href="#"
                                             data-toggle="modal"
                                             data-target="#statusModal"
-                                            data-status="{{ $user->status }}"
+                                            data-status="{{ $product->status }}"
                                         >
-                                            @if ($user->status == 'ACTIVE')
-                                                <div class="badge badge-success">{{$user->status}}</div>
+                                            @if ($product->status == 'ACTIVE')
+                                                <div class="badge badge-success">{{$product->status}}</div>
                                             @else
-                                                <div class="badge badge-secondary">{{$user->status}}</div>
+                                                <div class="badge badge-secondary">{{$product->status}}</div>
                                             @endif
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning">
+                                        <a href="" class="btn btn-warning">
                                             <i class="fas fa-edit"></i> Ubah
                                         </a>
                                         <a
                                             href="#"
                                             class="btn btn-danger"
-                                            onclick="deleteData({{ $user->id }}, 'users')"
+                                            onclick="deleteData({{ $product->id }}, 'products')"
                                             data-toggle="modal"
                                             data-target="#deleteModal"
                                         >
@@ -89,14 +110,14 @@
                                         </a>
                                     </td>
                                 </tr>
-                            @endforeach --}}
+                            @endforeach
                         </table>
                     </div>
                 </div>
                 <div class="card-footer bg-whitesmoke text-center">
                     <nav class="d-inline-block">
                         <ul class="pagination mb-0">
-                            {{-- {{ $users->links() }} --}}
+                            {{ $products->links() }}
                         </ul>
                     </nav>
                 </div>
@@ -107,9 +128,9 @@
 @endsection
 
 {{-- @section('custom-include')
-@include('admin.user-mgmt.users.status')
+@include('admin.product-mgmt.products.status')
 @endsection
 
 @section('custom-script')
-@include('admin.user-mgmt.users.script')
+@include('admin.product-mgmt.products.script')
 @endsection --}}
