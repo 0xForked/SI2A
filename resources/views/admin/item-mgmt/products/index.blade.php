@@ -19,8 +19,21 @@
                         >
                             <div class="input-group">
                                 <select name="search_key" class="form-control" style="font-size:12px; height:40px" >
-                                    <option>SKU</option>
-                                    <option>NAMA</option>
+                                    <option value="sku" {{
+                                        (app('request')->input('search_key'))
+                                        ? (((app('request')->input('search_key')) == "sku") ? 'selected' : '')
+                                        : ''
+                                    }}>SKU</option>
+                                    <option value="bets_number" {{
+                                        (app('request')->input('search_key'))
+                                        ? (((app('request')->input('search_key')) == "bets_number") ? 'selected' : '')
+                                        : ''
+                                    }}>BETS</option>
+                                    <option value="name" {{
+                                        (app('request')->input('search_key'))
+                                        ? (((app('request')->input('search_key')) == "name") ? 'selected' : '')
+                                        : ''
+                                    }}>NAMA</option>
                                 </select>
 
                                 <input
@@ -29,7 +42,7 @@
                                     placeholder="Kata kunci"
                                     name="search_value"
                                     style="height:40px"
-                                    value="{{ (app('request')->input('search')) ? app('request')->input('search') : ''}}"
+                                    value="{{ (app('request')->input('search_value')) ? app('request')->input('search_value') : ''}}"
                                 >
 
                                 <div class="input-group-btn">
@@ -40,20 +53,17 @@
                             </div>
                         </form>
                     </div>
-                    <button class="btn btn-primary ml-2" style="height:40px" onClick="window.location=''"><i class="fas fa-plus"></i> Tambah baru</button>
+                    <button class="btn btn-primary ml-2" style="height:40px" onClick="window.location='{{ route('admin.items.products.create') }}'"><i class="fas fa-plus"></i> Tambah baru</button>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-bordered table-md">
                             <tr>
                                 <th class="text-center">#</th>
-                                <th>SKU</th>
-                                <th>Bets</th>
+                                <th>Kode</th>
                                 <th>Nama</th>
-                                <th>Harga (Satuan)</th>
-                                <th>Stok</th>
-                                <th>Kategori -> Subkategori</th>
-                                <th>Kadaluarsa</th>
+                                <th>Persediaan</th>
+                                <th>Kedaluwarsa</th>
                                 <th>Status</th>
                                 <th width="300">Aksi</th>
                             </tr>
@@ -62,24 +72,14 @@
                                     <td class="text-center">
                                         {{ ($products->currentpage()-1) * $products->perpage() + $loop->iteration }}
                                     </td>
-                                    <td>{{ $product->sku }}</td>
-                                    <td>{{ $product->bets_number }}</td>
-                                    <td>{{ $product->name }}</td>
-                                    <td>Rp. {{ $product->price }},- ({{ $product->unit->name }}) </td>
-                                    <td>{{ $product->stock }}</td>
                                     <td>
-                                        @if ($product->subcategory->category->name)
-                                            <a href="{{ route('admin.items.categories.index') }}?search={{ $product->subcategory->category->name }}">
-                                                {{ $product->subcategory->category->name }}
-                                            </a>
-                                        @endif
-                                        ->
-                                        @if ($product->subcategory->name)
-                                            <a href="{{ route('admin.items.subcategories.index') }}?search={{ $product->subcategory->name }}">
-                                                {{ $product->subcategory->name }}
-                                            </a>
-                                        @endif
+                                        <b>Serial</b>: {{ $product->sku }} <br>
+                                        <b>Produksi</b>: {{ $product->bets_number }} <br>
+                                        <b>Identitas</b>: {{ $product->marketing_authorization_number }} <br>
+
                                     </td>
+                                    <td>{{ $product->name }}</td>
+                                    <td>{{ $product->stock }}</td>
                                     <td>{{ $product->expired_date }}</td>
                                     <td>
                                         <a
@@ -96,7 +96,10 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="" class="btn btn-warning">
+                                        <a href="{{ route('admin.items.products.show', $product->id) }}" class="btn btn-info">
+                                            <i class="fas fa-eye"></i> Detail
+                                        </a>
+                                        <a href="{{ route('admin.items.products.edit', $product->id) }}" class="btn btn-warning">
                                             <i class="fas fa-edit"></i> Ubah
                                         </a>
                                         <a
@@ -129,8 +132,4 @@
 
 {{-- @section('custom-include')
 @include('admin.product-mgmt.products.status')
-@endsection
-
-@section('custom-script')
-@include('admin.product-mgmt.products.script')
 @endsection --}}

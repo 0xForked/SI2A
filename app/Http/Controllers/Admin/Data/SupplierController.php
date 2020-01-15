@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Data\Items;
+namespace App\Http\Controllers\Admin\Data;
 
-use App\Models\Data\Unit;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\Data\Supplier;
 
-class UnitsController extends Controller
+class SupplierController extends Controller
 {
 
     /**
@@ -26,17 +26,17 @@ class UnitsController extends Controller
      */
     public function index(Request $request)
     {
-        $units = Unit::paginate(5);
+        $suppliers = Supplier::paginate(5);
 
         if ($request->search) {
-            $units = Unit::where(
+            $suppliers = Supplier::where(
                 'name',
                 'LIKE',
                 "%$request->search%"
             )->paginate(5);
         }
 
-        return view('admin.item-mgmt.units.index', compact('units'));
+        return view('admin.supplier-mgmt.index', compact('suppliers'));
     }
 
     /**
@@ -47,8 +47,8 @@ class UnitsController extends Controller
      */
     public function show($id)
     {
-        $unit = Unit::findOrFail($id);
-        return response()->json($unit);
+        $supplier = Supplier::findOrFail($id);
+        return response()->json($supplier);
     }
 
     /**
@@ -61,14 +61,17 @@ class UnitsController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'description' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
         ]);
-        $unit = $request->only('name', 'description');
-        $action = Unit::create($unit);
+        $supplier = $request->only('name', 'address', 'city', 'email', 'phone');
+        $action = Supplier::create($supplier);
         if (!$action) {
-            return redirect()->back()->with('error','Failed add new Unit');
+            return redirect()->back()->with('error','Failed add new Supplier');
         }
-        return redirect()->back()->with('success','Unit created successfully');
+        return redirect()->back()->with('success','Supplier created successfully');
     }
 
     /**
@@ -82,12 +85,19 @@ class UnitsController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
         ]);
-        $unit = Unit::findOrFail($request->id);
-        $unit->name = $request->name;
-        $unit->description = $request->description;
-        $unit->save();
-        return redirect()->back()->with('success','Unit updated successfully');
+        $supplier = Supplier::findOrFail($request->id);
+        $supplier->name = $request->name;
+        $supplier->address = $request->address;
+        $supplier->email = $request->email;
+        $supplier->phone = $request->phone;
+        $supplier->city = $request->city;
+        $supplier->save();
+        return redirect()->back()->with('success','Supplier updated successfully');
     }
 
     /**
@@ -98,9 +108,9 @@ class UnitsController extends Controller
      */
     public function destroy($id)
     {
-        Unit::findOrFail($id)->delete();
+        Supplier::findOrFail($id)->delete();
         return redirect()
-                ->route('admin.items.units.index')
-                ->with('success', 'Units delete successfully');
+                ->route('admin.suppliers.index')
+                ->with('success', 'Supplier delete successfully');
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Data\Items;
+namespace App\Http\Controllers\Admin\Data;
 
-use App\Models\Data\Unit;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\Data\Customer;
 
-class UnitsController extends Controller
+class CustomerController extends Controller
 {
 
     /**
@@ -26,18 +26,19 @@ class UnitsController extends Controller
      */
     public function index(Request $request)
     {
-        $units = Unit::paginate(5);
+        $customers = Customer::paginate(5);
 
         if ($request->search) {
-            $units = Unit::where(
+            $customers = Customer::where(
                 'name',
                 'LIKE',
                 "%$request->search%"
             )->paginate(5);
         }
 
-        return view('admin.item-mgmt.units.index', compact('units'));
+        return view('admin.customer-mgmt.index', compact('customers'));
     }
+
 
     /**
      * Display the specified resource.
@@ -47,8 +48,8 @@ class UnitsController extends Controller
      */
     public function show($id)
     {
-        $unit = Unit::findOrFail($id);
-        return response()->json($unit);
+        $customer = Customer::findOrFail($id);
+        return response()->json($customer);
     }
 
     /**
@@ -61,14 +62,16 @@ class UnitsController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'description' => 'required',
+            'address' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
         ]);
-        $unit = $request->only('name', 'description');
-        $action = Unit::create($unit);
+        $customer = $request->only('name', 'address', 'email', 'phone');
+        $action = Customer::create($customer);
         if (!$action) {
-            return redirect()->back()->with('error','Failed add new Unit');
+            return redirect()->back()->with('error','Failed add new Customer');
         }
-        return redirect()->back()->with('success','Unit created successfully');
+        return redirect()->back()->with('success','Customer created successfully');
     }
 
     /**
@@ -82,12 +85,17 @@ class UnitsController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
+            'address' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
         ]);
-        $unit = Unit::findOrFail($request->id);
-        $unit->name = $request->name;
-        $unit->description = $request->description;
-        $unit->save();
-        return redirect()->back()->with('success','Unit updated successfully');
+        $customer = Customer::findOrFail($request->id);
+        $customer->name = $request->name;
+        $customer->address = $request->address;
+        $customer->email = $request->email;
+        $customer->phone = $request->phone;
+        $customer->save();
+        return redirect()->back()->with('success','Customer updated successfully');
     }
 
     /**
@@ -98,9 +106,10 @@ class UnitsController extends Controller
      */
     public function destroy($id)
     {
-        Unit::findOrFail($id)->delete();
+        Customer::findOrFail($id)->delete();
         return redirect()
-                ->route('admin.items.units.index')
-                ->with('success', 'Units delete successfully');
+                ->route('admin.customers.index')
+                ->with('success', 'Customer delete successfully');
     }
+
 }

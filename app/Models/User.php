@@ -49,4 +49,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany("App\Models\Activity\Login");
     }
 
+    public function modifiedProducts()
+    {
+        return $this->hasMany('App\Models\Data\ProductModifiedHistory');
+    }
 }

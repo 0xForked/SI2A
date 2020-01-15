@@ -23,12 +23,16 @@ class ItemTableSeeder extends Seeder
     {
         $data = [
             [
-                'name' => 'narkotika',
-                'description' => 'Narkoba adalah singkatan dari narkotika dan obat/bahan berbahaya. Selain "narkoba", istilah lain yang diperkenalkan khususnya oleh Kementerian Kesehatan Republik Indonesia adalah Napza yang merupakan singkatan dari narkotika, psikotropika, dan zat adiktif.'
+                'name' => 'alkes',
+                'description' => 'alat kesehatan'
             ],
             [
-                'name' => 'psikotropika',
-                'description' => 'Psikotropika adalah suatu zat atau obat alamiah maupun sintetis bukan narkotika, yang berkhasiat psikoaktif melalui pengaruh selektif pada susunan saraf pusat yang menyebabkan perubahan khas pada aktivitas mental dan perilaku.'
+                'name' => 'obat',
+                'description' => 'obat-obatan'
+            ],
+            [
+                'name' => 'BMHP',
+                'description' => 'bahan medis habis pakai'
             ]
         ];
 
@@ -39,66 +43,42 @@ class ItemTableSeeder extends Seeder
 
     private function subcategories()
     {
+        // http://regalkes.depkes.go.id/informasi_alkes/Pedoman%20Klasifikasi.pdf
         $data = [
             [
-                'name' => 'fentanil',
-                'description' => 'fentanil adalah opioid yang digunakan sebagai analgesik atau jika bersamaan dengan obat lain berfungsi sebagai obat bius.',
+                'name' => 'alat kesehatan aktif',
+                'description' => 'Alat kesehatan yang dioperasikan menggunakan sumber energi listrik
+                atau sumber energi lainnya selain yang dihasilkan langsung oleh tubuh
+                manusia atau gravitasi; yang bekerja dengan mengubah energi tersebut. - Depkes [Pedoman Klasifikasi Hal 4 No 2.1.3]',
                 'category_id' => 1
             ],
             [
-                'name' => 'flakka',
-                'description' => 'Flakka, atau nama ilmiahnya α-Pyrrolidinopentiophenone (dikenal juga dengan nama α-pyrrolidinovalerophenone, α-PVP, O-2387, β-keto-prolintane, prolintanone, atau desmethylpyrovalerone) adalah stimulan sintetis dari jenis katinon yang dikembangkan tahun 1960-an, dan dijual sebagai obat desainer.',
+                'name' => 'alat kesehatan aktif terapetik',
+                'description' => 'alat kesehatan aktif, yang digunakan sendiri atau digabungkan dengan
+                alat kesehatan lain, untuk mendukung, mengubah, menggantikan atau
+                memperbaiki fungsi atau struktur biologi untuk pengobatan atau
+                mengurangi penyakit, cedera, atau cacat',
                 'category_id' => 1
             ],
             [
-                'name' => 'halusinogen',
-                'description' => 'halusinogen adalah jenis narkoba yang dapat menimbulkan efek halusinasi yang bersifat mengubah perasaan, pikiran dan seringkali menciptakan daya pandang yang berbeda sehingga seluruh perasaan dapat terganggu.',
-                'category_id' => 1
-            ],
-            [
-                'name' => 'heroin',
-                'description' => 'heroin atau diamorfin (INN) adalah sejenis opioid alkaloid. ',
-                'category_id' => 1
-            ],
-            [
-                'name' => 'katinona',
-                'description' => 'Katinona, atau benzoyletanamina atau bisa juga disebut Neropedron. ',
-                'category_id' => 1
-            ],
-            [
-                'name' => 'krokodil',
-                'description' => 'Krokodil atau nama ilmiahnya Desomorphine adalah narkotika jenis opioid sintetis yang dahulunya dibuat oleh Roche.',
-                'category_id' => 1
-            ],
-            [
-                'name' => 'metamfetamina',
-                'description' => 'Metamfetamina, disingkat met, dan dikenal di Indonesia sebagai sabu-sabu, adalah obat psikostimulansia dan simpatomimetik.',
-                'category_id' => 1
-            ],
-            [
-                'name' => 'opium',
-                'description' => 'Opium, apiun, atau candu adalah getah bahan baku narkotika yang diperoleh dari buah candu yang belum matang.',
-                'category_id' => 1
-            ],
-            [
-                'name' => 'rohypnol',
-                'description' => 'Rohypnol atau nama lainnya Flunitrazepam adalah obat jenis benzodiazepin untuk mengobati keluhan tidur dan dalam frekuensi yang jarang sebagai obat bius. ',
-                'category_id' => 1
-            ],
-            [
-                'name' => 'afrodisiak',
-                'description' => 'Afrodisiak adalah zat yang mampu meningkatkan gairah seksual. ',
+                'name' => 'herbal',
+                'description' => 'Obat herbal atau alami',
                 'category_id' => 2
             ],
             [
-                'name' => 'Metilendioksimetamfetamina',
-                'description' => 'MDMA (3,4-metilendioksi-metamfetamina), biasanya dikenal dengan nama Ekstasi, E, X, atau XTC adalah senyawa kimia yang sering digunakan sebagai obat rekreasi yang membuat penggunanya menjadi sangat aktif.',
+                'name' => 'farma',
+                'description' => 'Obat berbahan kimia',
                 'category_id' => 2
             ],
             [
-                'name' => 'Tetrahidrokanabinol',
-                'description' => 'Tetrahidrokanabinol adalah psikotropika yang merupakan senyawa utama dari ganja. Zat ini hanya dihasilkan tanaman Kanabis.',
-                'category_id' => 2
+                'name' => 'selang',
+                'description' => 'alat-alat yang berhubungan dengan selang',
+                'category_id' => 3
+            ],
+            [
+                'name' => 'suntik',
+                'description' => 'alat-alat yang berhubungan dengan suntik',
+                'category_id' => 3
             ],
         ];
 
@@ -117,7 +97,7 @@ class ItemTableSeeder extends Seeder
             [
                 'name' => 'btl',
                 'description' => 'botol'
-            ]
+            ],
         ];
 
         foreach($data as $unit) {

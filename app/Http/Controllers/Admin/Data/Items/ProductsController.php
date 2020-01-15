@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers\Admin\Data\Items;
 
+use Subcategories;
+use App\Models\Data\Unit;
 use App\Models\Data\Product;
 use Illuminate\Http\Request;
+use App\Models\Data\Category;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Data\ProductModifiedHistory;
 
 class ProductsController extends Controller
 {
@@ -44,13 +49,34 @@ class ProductsController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        // todo select transaction_item where id is product_id with transaction
+        $product = Product::with('unit')
+                        ->with(['subcategory' => function($query) {
+                            $query->with('category');
+                        }])->with(['modifiedHistories' => function($query) {
+                            $query->with('user:id,name');
+                        }])->findOrFail($id);
+
+        return view('admin.item-mgmt.products.show', compact('product'));
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        $units = Unit::all();
+        return view('admin.item-mgmt.products.add', compact('categories', 'units'));
     }
 
     /**
@@ -61,7 +87,39 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'sku' => 'required|unique:products,sku',
+            'bets_number' => 'required',
+            'marketing_authorization_number' => 'required',
+            'expired_date' => 'required',
+            'name' => 'required',
+            'price' => 'required',
+            'unit_id' => 'required',
+            'subcategory_id' => 'required',
+            'status' => 'required',
+        ]);
+
+        $data = $request->only(
+            'sku',
+            'bets_number',
+            'marketing_authorization_number',
+            'expired_date',
+            'name',
+            'price',
+            'unit_id',
+            'subcategory_id',
+            'status'
+        );
+
+        $action = Product::create($data);
+
+        if (!$action) {
+            return redirect()->back()->with('error','Failed add new Product');
+        }
+
+        return redirect()
+            ->route('admin.items.products.index')
+            ->with('success', 'Products successfully added with default stock is 0.');
     }
 
     /**
@@ -72,7 +130,12 @@ class ProductsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $categories = Category::all();
+        $units = Unit::all();
+        $product = Product::with(['subcategory' => function($query) {
+            $query->with('category');
+        }])->find($id);
+        return view('admin.item-mgmt.products.edit', compact('categories', 'units', 'product'));
     }
 
     /**
@@ -84,7 +147,48 @@ class ProductsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //  todo jangan tambah di modified kalau data sama
+
+        $product = Product::findOrFail($id);
+
+        $product_origin = $product->only(
+            'sku',
+            'bets_number',
+            'marketing_authorization_number',
+            'expired_date',
+            'name',
+            'price',
+            'unit_id',
+            'subcategory_id',
+            'status'
+        );
+
+        $product_modified = $request->only(
+            'sku',
+            'bets_number',
+            'marketing_authorization_number',
+            'expired_date',
+            'name',
+            'price',
+            'unit_id',
+            'subcategory_id',
+            'status'
+        );
+
+        $modified_history = [
+            'product_id' => (Int)$id,
+            'before' => json_encode($product_origin),
+            'after' => json_encode($product_modified),
+            'user_id' => Auth::user()->id,
+        ];
+
+        $product->update($product_modified);
+
+        ProductModifiedHistory::create($modified_history);
+
+        return redirect()
+            ->route('admin.items.products.index')
+            ->with('success', 'Product successfully edited.');
     }
 
     public function status($status)
@@ -103,6 +207,10 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        ProductModifiedHistory::where('product_id', $id)->delete();
+        Product::findOrFail($id)->delete();
+        return redirect()
+                ->route('admin.items.products.index')
+                ->with('success', 'Product delete successfully');
     }
 }

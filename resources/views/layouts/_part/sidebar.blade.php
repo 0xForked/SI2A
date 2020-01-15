@@ -51,16 +51,30 @@
                     </li>
                 </ul>
             </li>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link has-dropdown">
+                    <i class="fas fa-window-restore"></i>
+                    <span>Barang</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="">
+                        <a class="nav-link" href="">Stock</a>
+                    </li>
+                    <li class="">
+                        <a class="nav-link" href="">Kadaluarsa</a>
+                    </li>
+                </ul>
+            </li>
 
             <li class="menu-header">DATA</li>
-            <li class="">
-                <a class="nav-link" href="">
+            <li class="{{ (Request::segment(2) == 'customers') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('admin.customers.index') }}">
                     <i class="fas fa-users"></i>
                     <span>Pelanggan</span>
                 </a>
             </li>
-            <li class="">
-                <a class="nav-link" href="">
+            <li class="{{ (Request::segment(2) == 'suppliers') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('admin.suppliers.index') }}">
                     <i class="fas fa-truck"></i>
                     <span>Pemasok</span>
                 </a>

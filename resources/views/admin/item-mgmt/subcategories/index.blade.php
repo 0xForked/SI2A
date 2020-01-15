@@ -6,8 +6,9 @@
 <div class="section-body">
     <h2 class="section-title">Subkategori</h2>
     <p class="section-lead">Daftar Subkategori Barang.</p>
-    @include('layouts._part.flash')
-
+    @if(!$errors->any())
+        @include('layouts._part.flash')
+    @endif
     <div class="row">
         <div class="col-md-4">
             <div class="card">
@@ -22,11 +23,21 @@
                         @csrf
                         <div class="form-group">
                             <label>Nama</label>
-                            <input type="text" name="name" class="form-control">
+                            <input type="text" name="name"  class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}">
+                            @error('name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label>Deskripsi</label>
-                            <textarea class="form-control h-auto" name="description"></textarea>
+                            <textarea class="form-control h-auto @error('description') is-invalid @enderror" value="{{ old('description') }}" name="description"></textarea>
+                            @error('description')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label>Kategori</label>
@@ -90,15 +101,15 @@
                                         {{ ($subcategories->currentpage()-1) * $subcategories->perpage() + $loop->iteration }}
                                     </td>
                                     <td>
-                                        {{ $subcategory->name }}
+                                        {{ ucwords($subcategory->name) }}
                                     </td>
                                     <td>
-                                        {{ $subcategory->description }}
+                                        {{ ucwords($subcategory->description) }}
                                     </td>
                                     <td>
                                         @if ($subcategory->category)
                                             <a href="{{ route('admin.items.categories.index') }}?search={{ $subcategory->category->name }}">
-                                                {{ $subcategory->category->name }}
+                                                {{ strtoupper($subcategory->category->name) }}
                                             </a>
                                         @endif
                                     </td>

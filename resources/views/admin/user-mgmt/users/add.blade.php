@@ -6,7 +6,11 @@
 <div class="section-body">
     <h2 class="section-title">Pengguna</h2>
     <p class="section-lead">Tambah data pengguna untuk mengakses sistem.</p>
-    @include('layouts._part.flash')
+
+    @if(!$errors->any())
+        @include('layouts._part.flash')
+    @endif
+
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -19,9 +23,15 @@
                             <div class="col-sm-12 col-md-7">
                                 <input
                                     type="email"
-                                    class="form-control"
                                     name="email"
+                                    class="form-control @error('email') is-invalid @enderror"
+                                    value="{{ old('email') }}"
                                 >
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
                         <div class="form-group row mb-4">
@@ -29,9 +39,15 @@
                             <div class="col-sm-12 col-md-7">
                                 <input
                                     type="text"
-                                    class="form-control"
                                     name="username"
+                                    class="form-control @error('username') is-invalid @enderror"
+                                    value="{{ old('username') }}"
                                 >
+                                @error('username')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
                         <div class="form-group row mb-4">
@@ -39,9 +55,15 @@
                             <div class="col-sm-12 col-md-7">
                                 <input
                                     type="text"
-                                    class="form-control"
                                     name="phone"
+                                    class="form-control @error('phone') is-invalid @enderror"
+                                    value="{{ old('phone') }}"
                                 >
+                                @error('phone')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
                         <div class="form-group row mb-4">
@@ -49,9 +71,15 @@
                             <div class="col-sm-12 col-md-7">
                                 <input
                                     type="text"
-                                    class="form-control"
                                     name="name"
+                                    class="form-control @error('name') is-invalid @enderror"
+                                    value="{{ old('name') }}"
                                 >
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
                         <div class="form-group row mb-4">

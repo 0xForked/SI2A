@@ -13,7 +13,17 @@ class Product extends Model
      * @var array
      */
     protected $fillable = [
-
+        'sku',
+        'image',
+        'stock',
+        'bets_number',
+        'marketing_authorization_number',
+        'expired_date',
+        'name',
+        'price',
+        'unit_id',
+        'subcategory_id',
+        'status'
     ];
 
     /**
@@ -36,4 +46,10 @@ class Product extends Model
         return $this->belongsTo('App\Models\Data\Subcategory');
     }
 
+    public function modifiedHistories()
+    {
+        return $this->hasMany('App\Models\Data\ProductModifiedHistory')
+                    ->orderBy('created_at', 'desc')
+                    ->limit(6);
+    }
 }

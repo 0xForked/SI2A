@@ -16,7 +16,7 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('sku'); // Stock keeping unit / nomor serial produk
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('name');
             $table->string('bets_number');
             $table->string('marketing_authorization_number');

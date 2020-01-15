@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Models\Data\Category;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,4 +35,10 @@ Route::group([
     'namespace' => 'Api\V1'
 ], function () {
     Route::get('/role/{id}/permissions', 'PermissionApiController@permissionsByRole');
+
+    Route::get('/category/{id}/subcategories', function($id) {
+        $subcategories = Category::with('subcategories')->where('id', $id)->first();
+        return response()->json($subcategories->subcategories);
+    });
+
 });

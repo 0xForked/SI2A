@@ -77,6 +77,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/home', 'HomeController@index')->name('home');
 
         Route::group([
+            'namespace' => 'Data'
+        ], function () {
+            Route::resource('customers', 'CustomerController')
+            ->only(['index', 'show', 'store']);
+            Route::put('/customers', 'CustomerController@update')->name('customers.update');
+            Route::get('/customers/{id}/delete', 'CustomerController@destroy');
+
+            Route::resource('suppliers', 'SupplierController')
+            ->only(['index', 'show', 'store']);
+            Route::put('/suppliers', 'SupplierController@update')->name('suppliers.update');
+            Route::get('/suppliers/{id}/delete', 'SupplierController@destroy');
+        });
+
+        Route::group([
             'prefix'=>'items',
             'as' => 'items.',
             'namespace' => 'Data\Items'
@@ -84,7 +98,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/', function () { return redirect('admin/home'); });
 
             Route::resource('products', 'ProductsController')
-            ->only(['index', 'create', 'store', 'edit', 'update']);
+            ->only(['index', 'show', 'create', 'store', 'edit', 'update']);
             Route::get('/products/{id}/delete', 'ProductsController@destroy');
 
             Route::resource('categories', 'CategoryController')
