@@ -73,3 +73,15 @@ if (! function_exists('background_walk')) {
         return 'malam-di-manado.jpg';
     }
 }
+
+if (! function_exists('transaction_type')) {
+    function transaction_type($type)
+    {
+        if (isset($type)) {
+            $data = ($type == 'purchase') ? 'Pembelian' : 'Penjualan';
+            return ($data);
+        }
+
+        return;
+    }
+}

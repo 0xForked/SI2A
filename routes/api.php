@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use App\Models\Data\Category;
+use App\Models\Data\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
 Route::get('/ping', function() {
     return response()->json([
         'status' => 'ok',
@@ -27,7 +27,6 @@ Route::get('/ping', function() {
         'message' => 'pong'
     ]);
 });
-
 
 Route::group([
     'prefix'=>'v1',
@@ -39,6 +38,18 @@ Route::group([
     Route::get('/category/{id}/subcategories', function($id) {
         $subcategories = Category::with('subcategories')->where('id', $id)->first();
         return response()->json($subcategories->subcategories);
+    });
+
+    Route::get('/products/{type}', function($type) {
+        $today = date('Y-m-d');
+        $products = [];
+        if ($type == 'purchase') $products = Product::paginate(20);
+        if ($type == 'selling') {
+            $products = Product::where('stock', '>', 0)
+                                ->where('expired_date', '>=', $today)
+                                ->paginate(20);
+        }
+        return response()->json($products);
     });
 
 });

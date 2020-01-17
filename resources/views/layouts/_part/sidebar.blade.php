@@ -15,23 +15,17 @@
                 </a>
             </li>
             <li class="menu-header">FITUR</li>
-            {{-- <li class="">
-                <a class="nav-link" href="">
-                    <i class="fas fa-clipboard-check"></i>
-                    <span>Konfirmasi</span>
-                </a>
-            </li>--}}
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown {{ (Request::segment(2) == 'transactions') ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown">
                     <i class="fas fa-hand-holding-usd"></i>
                     <span>Transaksi</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class="">
-                        <a class="nav-link" href="">Pembelian</a>
+                    <li class="{{ (Request::segment(3) == 'purchase') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{url('/')}}/admin/transactions/purchase">Pembelian</a>
                     </li>
-                    <li class="">
-                        <a class="nav-link" href="">Penjualan</a>
+                    <li class="{{ (Request::segment(3) == 'selling') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ url('/') }}/admin/transactions/selling">Penjualan</a>
                     </li>
                 </ul>
             </li>

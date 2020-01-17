@@ -77,6 +77,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/home', 'HomeController@index')->name('home');
 
         Route::group([
+            'namespace' => 'Feature'
+        ], function () {
+            Route::resource('transactions/{type}', 'TransactionController')
+            ->only(['index']);
+        });
+
+        Route::group([
             'namespace' => 'Data'
         ], function () {
             Route::resource('customers', 'CustomerController')
