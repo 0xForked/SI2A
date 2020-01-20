@@ -96,11 +96,21 @@
                             <tr>
                                 <td>
                                     <b>
-                                        Harga/Satuan
+                                        Harga Beli/Satuan
                                     </b>
                                 </td>
                                 <td>
-                                    Rp. {{$product->price}},- / {{$product->unit->name}}
+                                    Rp. {{$product->price_buy}},- / {{$product->unit->name}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>
+                                        Harga Jual/Satuan
+                                    </b>
+                                </td>
+                                <td>
+                                    Rp. {{$product->price_sell}},- / {{$product->unit->name}}
                                 </td>
                             </tr>
                             <tr>

@@ -22,7 +22,8 @@ class CreateProductsTable extends Migration
             $table->string('marketing_authorization_number');
             $table->string('expired_date');
             $table->bigInteger('stock')->default(0);
-            $table->bigInteger('price')->nullable();
+            $table->bigInteger('price_buy')->nullable();
+            $table->bigInteger('price_sell')->nullable();
             $table->bigInteger('unit_id')->unsigned()->index()->nullable();
             $table->bigInteger('subcategory_id')->unsigned()->index()->nullable();
             $table->enum('status', [

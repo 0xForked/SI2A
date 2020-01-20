@@ -81,6 +81,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ], function () {
             Route::resource('transactions/{type}', 'TransactionController')
             ->only(['index']);
+            Route::post('transactions/{type}', 'TransactionController@open')->name('transactions.open');
+            Route::put(
+                'transactions/{transaction_id}/{product_id}',
+                'TransactionController@addItem'
+            )->name('transactions.item');
+
         });
 
         Route::group([

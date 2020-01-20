@@ -432,12 +432,12 @@
                                                     @method('PUT')
                                                     <div class="input-group">
                                                         <div class="custom-file text-left" style="margin-top:20px">
-                                                            <input type="file" name="site_database" class="custom-file-input" id="site-database" disabled>
+                                                            <input type="file" name="site_database" class="custom-file-input" id="site-database">
                                                             <label class="custom-file-label" id="site-database-label">Choose</label>
                                                         </div>
                                                     </div>
                                                     <span class="input-group-btn">
-                                                        <button onclick="" type="submit" class="btn btn-primary mt-4 ml-2" disabled>Mulai Proses Restorasi</button>
+                                                        <button onclick="showLoading()" type="submit" class="btn btn-primary mt-4 ml-2">Mulai Proses Restorasi</button>
                                                     </span>
                                                 </form>
                                                 <a href="#" class="mt-4 bb">Butuh bantuan?</a>

@@ -131,15 +131,31 @@
                             </div>
                         </div>
                         <div class="form-group row mb-4">
-                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Harga</label>
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Harga Beli</label>
                             <div class="col-sm-12 col-md-7">
                                 <input
                                     type="number"
-                                    name="price"
-                                    class="form-control @error('price') is-invalid @enderror"
-                                    value="{{ (old('price')) ? old('price') : $product->price }}"
+                                    name="price_buy"
+                                    class="form-control @error('price_buy') is-invalid @enderror"
+                                    value="{{ (old('price_buy')) ? old('price_buy') : $product->price_buy }}"
                                 >
-                                @error('price')
+                                @error('price_buy')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group row mb-4">
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Harga Jual</label>
+                            <div class="col-sm-12 col-md-7">
+                                <input
+                                    type="number"
+                                    name="price_sell"
+                                    class="form-control @error('price_sell') is-invalid @enderror"
+                                    value="{{ (old('price_sell')) ? old('price_sell') : $product->price_sell }}"
+                                >
+                                @error('price_sell')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

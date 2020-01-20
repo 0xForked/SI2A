@@ -6,7 +6,12 @@
                 class="article-image"
                 data-background="https://demo.getstisla.com/assets/img/news/img13.jpg"></div>
             <div class="article-badge">
-                <div class="article-badge-item bg-danger" data-toggle="tooltip" data-placement="top" title="Stok Tersedia">
+                <div
+                    class="article-badge-item bg-{{($product->stock > 0) ? 'success' : 'danger'}}"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Stok Tersedia"
+                >
                     <i class="fas fa-layer-group"></i>
                     {{$product->stock}}
                 </div>
@@ -17,9 +22,22 @@
                 <b>{{$product->name}}</b>
             </div>
             <div class="article-cta">
-                <button class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Tambah ke Cart">
-                    <i class="fas fa-plus"></i>
-                </button>
+                <form
+                    action="{{ route('admin.transactions.item', ['transaction_id' => (($transaction) ? $transaction->id : ''), 'product_id' => $product->id]) }}"
+                    method="post"
+                >
+                    @csrf
+                    @method('PUT')
+                    <button
+                        class="btn btn-primary"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Tambah ke Cart"
+                        type="submit"
+                    >
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </form>
             </div>
         </div>
     </article>

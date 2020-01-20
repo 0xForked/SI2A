@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin\Site;
 use Carbon\Carbon;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 
@@ -77,7 +80,16 @@ class DatabaseSettingController extends Controller
         if (!$disk->exists($file_new_name)) {
             return redirect()->back()->with('error', "Failed to restore database, Sql file not found.");
         }
-        // migration/database restore function
+
+        Artisan::call('migrate:reset', ['--force' => true]);
+
+        DB::unprepared(File::get(storage_path('app/restore/').$file_new_name));
+
+        unlink(storage_path('app/restore/'.$file_new_name));
+
+        Auth::logout();
+
+        return redirect('/login')->with('restore', 'Database berhasil direstore silahkan login kembali untuk mengakses aplikasi.');
     }
 
 }

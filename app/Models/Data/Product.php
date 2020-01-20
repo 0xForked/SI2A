@@ -20,7 +20,8 @@ class Product extends Model
         'marketing_authorization_number',
         'expired_date',
         'name',
-        'price',
+        'price_buy',
+        'price_sell',
         'unit_id',
         'subcategory_id',
         'status'

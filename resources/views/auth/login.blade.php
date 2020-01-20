@@ -83,3 +83,11 @@
         </div>
     </section>
 @endsection
+
+@section('custom-script')
+    @if ($message = Session::get('restore'))
+        <script>
+            alert('{{$message}}')
+        </script>
+    @endif
+@endsection

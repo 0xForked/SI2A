@@ -10,9 +10,9 @@
 
     <div class="row">
         <div class="col-md-7">
-            <div class="card bg-whitesmoke">
-                <div class="card-header">
-                    <h4>Daftar Produk</h4>
+            <div class="card-transparent">
+                <div class="mt-3">
+                    <h5>Daftar Produk ({{$products->count()}})</h5>
                 </div>
                 <div class="card-body">
                     @if ($products->count() > 0)
@@ -20,10 +20,10 @@
                             @include('admin.transactions.product')
                         </div>
                     @else
-                        <span>Tidak ada data tersedia . . .</span>
+                        <span>Tidak ada produk tersedia . . .</span>
                     @endif
                 </div>
-                <div class="card-footer text-center">
+                <div class="text-center">
                     <nav class="d-inline-block">
                         <ul class="pagination mb-0">
                             {{ $products->links() }}
@@ -36,34 +36,111 @@
         <div class="col-md-5">
            <div class="card">
                 <div class="card-header">
-                    <h4>Transaksi - {transaction_number}</h4>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-md">
-                            <tr>
-                                <th>Nama</th>
-                                <th width="120">Jumlah</th>
-                            </tr>
-                            <tr>
-                                <td class="align-middle">
-                                    <span style="font-size:17px;font-weight:bold;"> {nama_produk} </span>
-                                </td>
-                                <td>
-                                    <input class="form-control" type="number">
-                                </td>
-                            </tr>
-                        </table>
+                    <h4>Transaksi Pembelian (STOK) <br> Ref : {{($transaction) ? $transaction->ref_no : 'NONE'}}</h4>
+                    <div class="card-header-form">
+                        <button class="btn btn-primary" value="search" data-toggle="tooltip" data-placement="top" title="Transaksi Belum Selesai">
+                            <i class="far fa-list-alt"></i>
+                        </button>
                     </div>
                 </div>
-                <div class="card-footer bg-whitesmoke">
-                    <button class="btn btn-warning">Clear</button>
-                    <button class="btn btn-primary float-right">Proses</button>
-                </div>
+                @if ($transaction)
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-md">
+                                @foreach ($transaction->items as $item)
+                                    <tr>
+                                        <td class="align-middle" style="font-weight:bold">1</td>
+                                        <td class="align-middle" >
+                                            <span style="font-size:15px;font-weight:bold;"> {{$item->name}} </span>
+                                        </td>
+                                        <td class="align-middle" style="font-size:15px;font-weight:bold;">
+                                            Rp.{{$item->total}},-
+                                        </td>
+                                        <td class="align-middle" width="120">
+                                            <div class="qty">
+                                                <span class="minus bg-dark mt-1">-</span>
+                                                <input type="number" class="count" name="qty" value="{{$item->qty}}">
+                                                <span class="plus bg-dark mt-1">+</span>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle" width="10">
+                                            <a href="">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </table>
+                            @if (count($transaction->items) == 0)
+                                Item belum ditambahkan
+                            @endif
+                            @if (count($transaction->items) > 0)
+                                <hr>
+                                <div class="float-right text-bold">
+                                <table>
+                                        <tr>
+                                            <td class="pr-3">
+                                                <h5>Disc  </h5>
+                                            </td>
+                                            <td>
+                                                <h5>: 0%</h5>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="pr-3">
+                                                <h5>Tax  </h5>
+                                            </td>
+                                            <td>
+                                                <h5>: 0%</h5>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                        <td class="pr-3">
+                                            <h5>Subtotal  </h5>
+                                            </td>
+                                        <td>
+                                            <h5>: Rp.{{$transaction->brutto}},-</h5>
+                                            </td>
+                                    </tr>
+                                </table>
+                                </div>
+                            @endif
+                        </div>
+                        @if (count($transaction->items) > 0)
+                            <hr>
+                            <div class="float-right text-bold">
+                                <table>
+                                    <tr>
+                                        <td class="flaot-left pr-3">
+                                            <h5>Total  </h5>
+                                        </td>
+                                        <td>
+                                            <h5>: Rp.{{$transaction->total}},-</h5>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        @endif
+                    </div>
+                    @if (count($transaction->items) > 0)
+                    <div class="card-footer bg-whitesmoke">
+                        <button class="btn btn-primary btn-block">Proses</button>
+                    </div>
+                    @endif
+                @endif
            </div>
         </div>
     </div>
 </div>
+@endsection
+
+@section('custom-include')
+{{-- @include('admin.transactions.purchase.add-item') --}}
+@include('admin.transactions.purchase.open-transaction')
+@endsection
+
+@section('custom-style')
+@include('admin.transactions.style')
 @endsection
 
 @section('custom-script')
