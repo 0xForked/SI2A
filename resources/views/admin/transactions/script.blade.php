@@ -39,4 +39,11 @@
             });
         }
     });
+
+    function addQty(id, name, qty) {
+        $('#item_id').val(id)
+        $('#item_name').text(name)
+        $('#add_qty').val(qty)
+    }
+
 </script>

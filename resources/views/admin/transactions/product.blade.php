@@ -22,6 +22,7 @@
                 <b>{{$product->name}}</b>
             </div>
             <div class="article-cta">
+                @if ($transaction)
                 <form
                     action="{{ route('admin.transactions.item', ['transaction_id' => (($transaction) ? $transaction->id : ''), 'product_id' => $product->id]) }}"
                     method="post"
@@ -34,10 +35,12 @@
                         data-placement="top"
                         title="Tambah ke Cart"
                         type="submit"
+                        onclick="showLoading()"
                     >
                         <i class="fas fa-plus"></i>
                     </button>
                 </form>
+                @endif
             </div>
         </div>
     </article>

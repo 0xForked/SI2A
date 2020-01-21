@@ -56,6 +56,17 @@
                                 class="nav-link"
                                 data-toggle="pill"
                                 role="tab"
+                                id="pills-transaction-tab"
+                                href="#pills-transaction"
+                                aria-controls="pills-transaction"
+                                aria-selected="true"
+                            >Transaksi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                class="nav-link"
+                                data-toggle="pill"
+                                role="tab"
                                 id="pills-backup-tab"
                                 href="#pills-backup"
                                 aria-controls="pills-backup"
@@ -316,6 +327,43 @@
                                             </label>
                                         </div>
                                     @endforeach
+                                </div>
+                            </div>
+                            <div class="card-footer bg-whitesmoke text-md-right">
+                                <button onclick="showLoading()" type="submit" class="btn btn-primary" id="save-btn">Save Changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+                <div
+                    class="tab-pane fade"
+                    id="pills-transaction"
+                    role="tabpanel"
+                    aria-labelledby="pills-transaction-tab">
+                    <form id="setting-form" action="{{route('admin.app.setting.transaction')}}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div class="card" id="settings-card">
+                            <div class="card-header">
+                                <h4>Pengaturan Otentikasi</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group row align-items-center">
+                                    <label for="site-tax-purchase" class="form-control-label col-sm-3 text-md-right">Pajak Pembelian</label>
+                                    <div class="col-sm-6 col-md-9">
+                                    <input type="text" name="site_tax_purchase" class="form-control" value="{{ $settings['site_tax_purchase']->value }}">
+                                    <div class="form-text text-muted">Normor dalam Persentasi (%)</div>
+                                    </div>
+
+                                </div>
+                                <div class="form-group row align-items-center">
+                                    <label for="site-tax-selling" class="form-control-label col-sm-3 text-md-right">Pajak Penjualan</label>
+                                    <div class="col-sm-6 col-md-9">
+                                    <input type="text" name="site_tax_selling" class="form-control" value="{{ $settings['site_tax_selling']->value }}">
+                                    <div class="form-text text-muted">Normor dalam Persentasi (%)</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card-footer bg-whitesmoke text-md-right">

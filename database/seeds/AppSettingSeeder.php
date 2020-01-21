@@ -81,6 +81,14 @@ class AppSettingSeeder extends Seeder
                 'key' => 'site_new_user_role',
                 'value' => 3
             ],
+            [
+                'key' => 'site_tax_purchase',
+                'value' => 0
+            ],
+            [
+                'key' => 'site_tax_selling',
+                'value' => 0
+            ],
         ];
 
         foreach ($data as $setting) {

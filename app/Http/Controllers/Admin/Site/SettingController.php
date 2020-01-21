@@ -172,4 +172,24 @@ class SettingController extends Controller
         return redirect()->back()->with('success', 'Action success with out errors');
     }
 
+    public function updateTransactionTable(Request $request)
+    {
+        $data = (Object)$request->only(
+            'site_tax_purchase',
+            'site_tax_selling',
+        );
+
+        foreach ($data as $key => $value) {
+            $setting = Setting::where('key', $key)->first();
+            if ($value != NULL) {
+                if ($setting->value != $value) {
+                    $setting->value = $value;
+                    $setting->save();
+                }
+            }
+        }
+
+        return redirect()->back()->with('success', 'Action success with out errors');
+    }
+
 }

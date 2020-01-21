@@ -38,20 +38,23 @@ class TransactionController extends Controller
             $products = Product::where('stock', '>', 0)
                                 ->where('expired_date', '>=', $today)
                                 ->paginate(2);
-
         $transaction = Transaction::where([
             'type' => $type,
             'status' => 'UNCOMPLETED'
         ])->with('items')->latest('created_at')->first();
-
+        $uncompleted_transactions = [];
+        if ($transaction) {
+            $uncompleted_transactions = Transaction::where('status', 'UNCOMPLETED')
+                                                    ->where('id', '!=' , $transaction->id)
+                                                    ->get();
+        }
         if ($request->ajax()) return view(
             'admin.transactions.product',
-            compact('products', 'transaction')
+            compact('products', 'transaction', 'uncompleted_transactions')
         )->render();
-
         return view(
             'admin.transactions.index',
-            compact('products', 'transaction')
+            compact('products', 'transaction', 'uncompleted_transactions')
         );
     }
 
@@ -64,23 +67,18 @@ class TransactionController extends Controller
             'recipient_id' => Auth::user()->id,
         ];
         $validate = Transaction::where([
-
             'type' => $type,
             'status' => 'UNCOMPLETED'
         ])->latest('created_at')->first();
-
         if ($validate) return Redirect::back()->with(
             'error',
             'You have uncompleted transaction'
         );
-
         $open = Transaction::create($data);
-
         if ($open) return Redirect::back()->with(
             'success',
             'Transaction created with Ref : '.$data['ref_no']
         );
-
         return;
     }
 
@@ -105,41 +103,83 @@ class TransactionController extends Controller
             'tax' => 0,
             'total' => $price
         ];
-
         $transaction_item = TransactionItem::where([
             'transaction_id' => $transaction->id,
             'product_id' => $product->id
         ])->first();
         if ($transaction_item) {
-            $transaction_item->qty = $transaction_item->qty + 1;
-            $transaction_item->price = $transaction_item->price + $price;
+            $transaction_item->qty = 1;
             $transaction_item->net = $transaction_item->net + $price;
             $transaction_item->total = $transaction_item->total + $price;
             $transaction_item->save();
+            $this->calculateTransaction($transaction_id);
+            return Redirect::back()->with(
+                'success',
+                "Added $product->name qty to cart!"
+            );
         }
-
         if (!$transaction_item) {
             $action = TransactionItem::create($data);
+            $this->calculateTransaction($transaction_id);
             if (!$action) return Redirect::back()->with(
                 'error',
                 'Failed add item on this transaction'
             );
         }
-
         return Redirect::back()->with(
             'success',
             "$product->name added to cart!"
         );
     }
 
-    public function deleteItem(Request $request, $product_id)
+    public function deleteItem(Request $request, $id)
     {
-        $transaction_item = TransactionItem::where([
-            'product_id' => $product_id
-        ])->first();
-
-        dd($transaction_item);
+        $transaction_item = TransactionItem::findOrFail($id);
+        $transaction_item->delete();
+        $this->calculateTransaction($transaction_item->transaction_id);
+        return Redirect::back()->with(
+            'success',
+            "$transaction_item->name deleted from cart!"
+        );
     }
 
+    public function addItemQty(Request $request)
+    {
+        $transaction_item = TransactionItem::findOrFail($request->item_id);
+        $transaction_item->qty = $request->add_qty;
+        $transaction_item->net = $transaction_item->price *  $request->add_qty;
+        $transaction_item->total = $transaction_item->price *  $request->add_qty;
+        $transaction_item->save();
+        $this->calculateTransaction($transaction_item->transaction_id);
+        return Redirect::back()->with(
+            'success',
+            "Added $transaction_item->name qty to cart!"
+        );
+    }
 
+    private function calculateTransaction($transaction_id)
+    {
+        $transaction = Transaction::findOrFail($transaction_id);
+        $transaction_item = TransactionItem::where('transaction_id', $transaction_id)->get();
+        $item_price = 0;
+        foreach ($transaction_item as $item) {
+            $item_price += $item->price * $item->qty;
+        }
+        $brutto = $item_price;
+        $disc = $transaction->disc;
+        $netto = $brutto - ($brutto * ($disc/100));
+        $tax =  (($netto * $disc) / 100);
+        $total = $netto + $tax;
+        $transaction->brutto  = $brutto;
+        $transaction->disc = $disc;
+        $transaction->netto = $netto;
+        $transaction->tax = $transaction->tax;
+        $transaction->total = $total;
+        $transaction->save();
+    }
+
+    private function printReport()
+    {
+        // todo print report after process
+    }
 }

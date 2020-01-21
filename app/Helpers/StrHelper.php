@@ -85,3 +85,12 @@ if (! function_exists('transaction_type')) {
         return;
     }
 }
+
+
+if (! function_exists('rupiah')) {
+    function rupiah($price)
+    {
+        return number_format($price,0,',','.');
+    }
+}
+

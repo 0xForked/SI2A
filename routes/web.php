@@ -83,10 +83,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->only(['index']);
             Route::post('transactions/{type}', 'TransactionController@open')->name('transactions.open');
             Route::put(
-                'transactions/{transaction_id}/{product_id}',
+                'transactions/{transaction_id}/{product_id}/add',
                 'TransactionController@addItem'
             )->name('transactions.item');
-
+            Route::post(
+                'transactions/{transaction_item_id}/remove',
+                'TransactionController@deleteItem'
+            )->name('transactions.item.remove');
+            Route::post(
+                'transactions/item/qty',
+                'TransactionController@addItemQty'
+            )->name('transactions.item.qty');
         });
 
         Route::group([
@@ -151,6 +158,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::put('/settings/generals', 'SettingController@updateGeneralData')->name('app.setting.generals');
             Route::put('/settings/contacts', 'SettingController@updateContactData')->name('app.setting.contacts');
             Route::put('/settings/auth', 'SettingController@updateAuthData')->name('app.setting.auth');
+            Route::put('/settings/transaction', 'SettingController@updateTransactionTable')->name('app.setting.transaction');
             Route::get('/settings/databases/backup', 'DatabaseSettingController@create')->name('setting.database.backup');
             Route::get('/settings/databases/download/{file_name}', 'DatabaseSettingController@download')->name('setting.database.download');
             Route::get('/settings/databases/delete/{file_name}', 'DatabaseSettingController@delete')->name('setting.database.delete');

@@ -1,4 +1,4 @@
-<style>
+{{-- <style>
     .qty .count {
         color: #000;
         display: inline-block;
@@ -56,4 +56,4 @@
     input:disabled{
         background-color:white;
     }
-</style>
+</style> --}}

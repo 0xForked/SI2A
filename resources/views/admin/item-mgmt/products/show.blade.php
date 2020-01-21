@@ -100,7 +100,7 @@
                                     </b>
                                 </td>
                                 <td>
-                                    Rp. {{$product->price_buy}},- / {{$product->unit->name}}
+                                    Rp. {{rupiah($product->price_buy)}},- / {{$product->unit->name}}
                                 </td>
                             </tr>
                             <tr>
@@ -110,7 +110,7 @@
                                     </b>
                                 </td>
                                 <td>
-                                    Rp. {{$product->price_sell}},- / {{$product->unit->name}}
+                                    Rp. {{rupiah($product->price_sell)}},- / {{$product->unit->name}}
                                 </td>
                             </tr>
                             <tr>
