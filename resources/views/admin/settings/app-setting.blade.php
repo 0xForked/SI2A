@@ -60,7 +60,7 @@
                                 href="#pills-transaction"
                                 aria-controls="pills-transaction"
                                 aria-selected="true"
-                            >Transaksi</a>
+                            >Transaksi, Barang & Laporan</a>
                         </li>
                         <li class="nav-item">
                             <a
@@ -347,13 +347,16 @@
                         @method('PUT')
                         <div class="card" id="settings-card">
                             <div class="card-header">
-                                <h4>Pengaturan Otentikasi</h4>
+                                <h4>Pengaturan Transaksi, Barang, dan Laporan</h4>
                             </div>
                             <div class="card-body">
+                                <p class="text-muted">
+                                    Transaksi
+                                </p>
                                 <div class="form-group row align-items-center">
                                     <label for="site-tax-purchase" class="form-control-label col-sm-3 text-md-right">Pajak Pembelian</label>
                                     <div class="col-sm-6 col-md-9">
-                                    <input type="text" name="site_tax_purchase" class="form-control" value="{{ $settings['site_tax_purchase']->value }}">
+                                    <input type="number" name="site_tax_purchase" class="form-control" value="{{ $settings['site_tax_purchase']->value }}">
                                     <div class="form-text text-muted">Normor dalam Persentasi (%)</div>
                                     </div>
 
@@ -361,8 +364,43 @@
                                 <div class="form-group row align-items-center">
                                     <label for="site-tax-selling" class="form-control-label col-sm-3 text-md-right">Pajak Penjualan</label>
                                     <div class="col-sm-6 col-md-9">
-                                    <input type="text" name="site_tax_selling" class="form-control" value="{{ $settings['site_tax_selling']->value }}">
+                                    <input type="number" name="site_tax_selling" class="form-control" value="{{ $settings['site_tax_selling']->value }}">
                                     <div class="form-text text-muted">Normor dalam Persentasi (%)</div>
+                                    </div>
+                                </div>
+                                <div class="form-group row align-items-center">
+                                    <label for="site-min-stock-selling" class="form-control-label col-sm-3 text-md-right">Minimal Stok <br> untuk Penjualan</label>
+                                    <div class="col-sm-6 col-md-9">
+                                    <input type="number" name="site_min_stock_selling" class="form-control" value="{{ $settings['site_min_stock_selling']->value }}">
+                                    <div class="form-text text-muted">Normor dalam jumlah (stok)</div>
+                                    </div>
+                                </div>
+                                <div class="form-group row align-items-center">
+                                    <label for="site-min-day-expired-selling" class="form-control-label col-sm-3 text-md-right">Minimal Hari (Penjualan) Sebelum Kadaluarsa</label>
+                                    <div class="col-sm-6 col-md-9">
+                                    <input type="number" name="site_min_day_expired_selling" class="form-control" value="{{ $settings['site_min_day_expired_selling']->value }}">
+                                    <div class="form-text text-muted">Normor dalam jumlah (hari)</div>
+                                    </div>
+                                </div>
+                                <p class="text-muted">
+                                    Laporan
+                                </p>
+                                <div class="form-group row align-items-center">
+                                    <label for="site-default-people-name-assign" class="form-control-label col-sm-3 text-md-right">Nama Pejabat <br> yang mengetahui (Default)</label>
+                                    <div class="col-sm-6 col-md-9">
+                                        <input type="text" name="site_default_people_name_assign" class="form-control" value="{{ $settings['site_default_people_name_assign']->value }}">
+                                        <div class="form-text text-muted">Nama Pejabat</div>
+                                        <div class="form-text text-info">
+                                            *Nama Pejabat ini bisa diubah ketika proses transaksi dan pencetakan bukti transaksi!
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row align-items-center">
+                                    <label for="site-default-people-nip-assign" class="form-control-label col-sm-3 text-md-right">NIP Pejabat <br> yang mengetahui (Default)</label>
+                                    <div class="col-sm-6 col-md-9">
+                                        <input type="text" name="site_default_people_nip_assign" class="form-control" value="{{ $settings['site_default_people_nip_assign']->value }}">
+                                        <div class="form-text text-muted">NIP Pejabat</div>
+                                        <div class="form-text text-info">*NIP Pejabat ini bisa diubah ketika proses transaksi dan pencetakan bukti transaksi!</div>
                                     </div>
                                 </div>
                             </div>
@@ -372,7 +410,6 @@
                         </div>
                     </form>
                 </div>
-
 
                 <div
                     class="tab-pane fade"

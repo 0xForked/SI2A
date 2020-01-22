@@ -65,26 +65,6 @@
                                         <td class="align-middle" style="font-size:13px;font-weight:bold;">
                                             Rp.{{rupiah($item->price)}},-
                                         </td>
-                                        {{-- <td class="align-middle" width="120">
-                                            <div class="qty">
-                                                <span class="minus bg-dark mt-1">-</span>
-                                                <input type="number" class="count" name="qty" value="{{$item->qty}}">
-                                                <span class="plus bg-dark mt-1">+</span>
-                                            </div>
-                                        </td> --}}
-                                        {{-- <td>
-                                            <div class="center">
-                                                <div class="input-group">
-                                                    <span class="input-group-btn">
-                                                        <button type="button" class="btn btn-sm btn-default  btn-number " onclick="OnChangeCountButton(this)" data-type="minus" data-field="quant[1]"><span class="minus bg-dark mt-1">-</span></button>
-                                                    </span>
-                                                    <input name="quant[1]" onkeydown="inputnumeronkeydown(event)" class="form-control input-sm input-number planQuantity" value="0" min="0" max="100" type="text">
-                                                    <span class="input-group-btn">
-                                                        <button type="button" class="btn btn-sm btn-default btn-number" onclick="OnChangeCountButton(this)" data-type="plus" data-field="quant[1]"><span class="plus bg-dark mt-1">+</span></button>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td> --}}
                                         <td class="align-middle">
                                             <a href="#" class="btn btn-icon btn-outline-info" data-toggle="modal"
                                             data-target="#itemQtyModal" onclick="addQty({{$item->id}},'{{$item->name}}',{{$item->qty}});">
@@ -123,7 +103,7 @@
                                     <table>
                                         <tr>
                                             <td class="pr-3">
-                                                <h5>Disc  </h5>
+                                                <h5>Disc</h5>
                                             </td>
                                             <td>
                                                 <h5>: 0%</h5>
@@ -167,7 +147,8 @@
                     </div>
                     @if (count($transaction->items) > 0)
                     <div class="card-footer bg-whitesmoke">
-                        <button class="btn btn-primary btn-block">Proses</button>
+                        <button class="btn btn-primary btn-block" data-toggle="modal"
+                        data-target="#processTransactionModal">Proses</button>
                     </div>
                     @endif
                 @endif
@@ -178,9 +159,10 @@
 @endsection
 
 @section('custom-include')
-@include('admin.transactions.purchase.add-qty')
-@include('admin.transactions.purchase.latest-transaction')
-@include('admin.transactions.purchase.open-transaction')
+@include('admin.transactions.partials.add-qty')
+@include('admin.transactions.partials.latest-transaction')
+@include('admin.transactions.partials.open-transaction')
+@include('admin.transactions.partials.process-transaction')
 @endsection
 
 @section('custom-script')

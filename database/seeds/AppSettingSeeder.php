@@ -89,6 +89,22 @@ class AppSettingSeeder extends Seeder
                 'key' => 'site_tax_selling',
                 'value' => 0
             ],
+            [
+                'key' => 'site_min_stock_selling',
+                'value' => 0
+            ],
+            [
+                'key' => 'site_min_day_expired_selling',
+                'value' => 0
+            ],
+            [
+                'key' => 'site_default_people_name_assign',
+                'value' => "Dr. Pura Pura, M.Kes"
+            ],
+            [
+                'key' => 'site_default_people_nip_assign',
+                'value' => 123456789
+            ],
         ];
 
         foreach ($data as $setting) {

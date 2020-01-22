@@ -2,7 +2,7 @@
     class="modal fade"
     tabindex="-1"
     role="dialog"
-    id="openPurchaseTransactionModal"
+    id="openTransactionModal"
 >
     <div
         class="modal-dialog modal-sm"

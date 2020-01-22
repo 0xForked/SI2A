@@ -11,10 +11,45 @@
 			}
     	});
 
-        @if(!isset($transaction) && Request::segment(3) == "purchase")
-            $('#openPurchaseTransactionModal').modal({backdrop: 'static', keyboard: false});
-            $('#openPurchaseTransactionModal').modal('show');
+        @if(!isset($transaction))
+            $('#openTransactionModal').modal({backdrop: 'static', keyboard: false});
+            $('#openTransactionModal').modal('show');
         @endif
+
+        $('#customer_select_radio').click(function() {
+            if($(this).prop("checked") == true) {
+                $('#customer_select_description').text('Diaktifkan')
+                $('#customer_container').show();
+                $('#customer_select').prop("disabled", false);
+                $('#customer_name_container').hide();
+                $('#custumer_name_input').prop("disabled", true);
+            }
+            else if($(this).prop("checked") == false) {
+                $('#customer_select_description').text('Dinonaktifkan')
+                $('#customer_container').hide();
+                $('#customer_select').prop("disabled", true);
+                $('#customer_name_container').show();
+                $('#custumer_name_input').prop("disabled", false);
+            }
+        });
+
+        // $('#supplier_select_radio').click(function() {
+        //     if($(this).prop("checked") == true) {
+        //         $('#supplier_select_description').text('Diaktifkan')
+        //         $('#supplier_container').show();
+        //         $('#supplier_select').prop("disabled", false);
+        //         $('#supplier_name_container').hide();
+        //         $('#supplier_name_input').prop("disabled", true);
+        //     }
+        //     else if($(this).prop("checked") == false) {
+        //         $('#supplier_select_description').text('Dinonaktifkan')
+        //         $('#supplier_container').hide();
+        //         $('#supplier_select').prop("disabled", true);
+        //         $('#supplier_name_container').show();
+        //         $('#supplier_name_input').prop("disabled", false);
+        //     }
+        // });
+
  	});
 
     $(function() {

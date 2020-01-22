@@ -76,12 +76,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/home', 'HomeController@index')->name('home');
 
+
         Route::group([
             'namespace' => 'Feature'
         ], function () {
-            Route::resource('transactions/{type}', 'TransactionController')
-            ->only(['index']);
-            Route::post('transactions/{type}', 'TransactionController@open')->name('transactions.open');
+            Route::resource(
+                'transactions/{type}',
+                'TransactionController'
+            )->only(['index']);
+            Route::post(
+                'transactions/{type}/open',
+                'TransactionController@open'
+            )->name('transactions.open');
             Route::put(
                 'transactions/{transaction_id}/{product_id}/add',
                 'TransactionController@addItem'
@@ -94,6 +100,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 'transactions/item/qty',
                 'TransactionController@addItemQty'
             )->name('transactions.item.qty');
+
+
+            Route::get(
+                '/document/{transaction_id}',
+                'DocumentController@index'
+            )->name('transaction.printout');
         });
 
         Route::group([

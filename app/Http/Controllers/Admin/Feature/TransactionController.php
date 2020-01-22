@@ -6,6 +6,8 @@ use App\Models\Transaction;
 use App\Models\Data\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Data\Customer;
+use App\Models\Data\Supplier;
 use App\Models\TransactionItem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -48,13 +50,15 @@ class TransactionController extends Controller
                                                     ->where('id', '!=' , $transaction->id)
                                                     ->get();
         }
+        $customers = Customer::all();
+        $suppliers = Supplier::all();
         if ($request->ajax()) return view(
             'admin.transactions.product',
-            compact('products', 'transaction', 'uncompleted_transactions')
+            compact('products', 'transaction', 'uncompleted_transactions', 'customers', 'suppliers')
         )->render();
         return view(
             'admin.transactions.index',
-            compact('products', 'transaction', 'uncompleted_transactions')
+            compact('products', 'transaction', 'uncompleted_transactions', 'customers', 'suppliers')
         );
     }
 
@@ -82,9 +86,10 @@ class TransactionController extends Controller
         return;
     }
 
-    public function process()
+    public function process(Request $request, $transaction_id)
     {
-        //
+        $transaction = Transaction::with('items')->findOrFail($transaction_id);
+        dd($transaction);
     }
 
     public function addItem(Request $request, $transaction_id, $product_id)
@@ -108,7 +113,7 @@ class TransactionController extends Controller
             'product_id' => $product->id
         ])->first();
         if ($transaction_item) {
-            $transaction_item->qty = 1;
+            $transaction_item->qty =  $transaction_item->qty + 1;
             $transaction_item->net = $transaction_item->net + $price;
             $transaction_item->total = $transaction_item->total + $price;
             $transaction_item->save();
