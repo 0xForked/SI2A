@@ -129,8 +129,14 @@
                 </div>
                 <div class="card-footer bg-whitesmoke">
                     <div class="float-right">
-                        <button class="btn btn-warning" type="submit">Edit</button>
-                        <button class="btn btn-danger" type="submit">Delete</button>
+                        <button class="btn btn-warning" type="submit" onClick="window.location='{{ route('admin.items.products.edit', $product->id) }}'">Edit</button>
+                        <button
+                            class="btn btn-danger"
+                            type="submit"
+                            onclick="deleteData({{ $product->id }}, 'products')"
+                            data-toggle="modal"
+                            data-target="#deleteModal"
+                        >Delete</button>
                     </div>
                 </div>
             </div>
@@ -147,7 +153,6 @@
                         <table class="table table-striped table-md">
                             <tr>
                                 <th>Keterangan</th>
-                                <th>Aksi</th>
                             </tr>
 
                             @foreach ($product->modifiedHistories as $modifHistory)
@@ -157,11 +162,6 @@
                                         Produk di <span class="text-warning">perbaharui</span> pada {{$modifHistory->created_at}} <br>
                                         oleh <code>{{$modifHistory->user->name}}</code>
                                     </b>
-                                </td>
-                                <td>
-                                    <a href="http://">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
                                 </td>
                             </tr>
                             @endforeach
@@ -178,11 +178,6 @@
                                         Produk di <span class="text-primary">input</span> pada {{$product->created_at}} <br>
                                         oleh <code> {{app('auth')->user()->name}} </code>
                                     </b>
-                                </td>
-                                <td>
-                                    <a href="http://">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
                                 </td>
                             </tr>
                         </table>
@@ -207,20 +202,32 @@
                                 <th>Keterangan</th>
                                 <th>Aksi</th>
                             </tr>
-                            <tr>
-                                <td>
-                                    <b>
-                                        Barang masuk sejumalah 30 unit <br>
-                                        pada tanggal : tgl<br>
-                                        nomor transaksi : tr_no
-                                    </b>
-                                </td>
-                                <td>
-                                    <a href="http://">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                            @foreach ($transaction_item_purchases as $item)
+                                @if (!is_null($item->transaction))
+                                    <tr>
+                                        <td>
+                                            <b>
+                                                Barang masuk sejumalah {{$item->qty}}  {{$product->unit->description}} (<span class="text-success">Stok Bertambah</span>) <br>
+                                                pada tanggal : {{$item->transaction->updated_at}}<br>
+                                                nomor transaksi : {{$item->transaction->ref_no}}
+
+                                            </b>
+                                        </td>
+                                        <td>
+                                            <a href="http://">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @else
+                                    <tr>
+                                        <td>
+                                            Tidak ada transaksi pembelian untuk produk ini
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
+
                         </table>
                     </div>
                     <div class="text-center">
@@ -243,20 +250,30 @@
                                 <th>Keterangan</th>
                                 <th>Aksi</th>
                             </tr>
-                            <tr>
-                                <td>
-                                    <b>
-                                        Barang keluar sejumalah 30 unit <br>
-                                        pada tanggal : tgl<br>
-                                        nomor transaksi : tr_no
-                                    </b>
-                                </td>
-                                <td>
-                                    <a href="http://">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                            @foreach ($transaction_item_selling as $item)
+                                @if (!is_null($item->transaction))
+                                    <tr>
+                                        <td>
+                                            <b>
+                                                Barang masuk sejumalah {{$item->qty}} {{$product->unit->description}} (<span class="text-warning">Stok Berkurang</span>)<br>
+                                                pada tanggal : {{$item->transaction->updated_at}}<br>
+                                                nomor transaksi : {{$item->transaction->ref_no}}
+                                            </b>
+                                        </td>
+                                        <td>
+                                            <a href="http://">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @else
+                                    <tr>
+                                        <td>
+                                            Tidak ada transaksi penjualan untuk produk ini
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
                         </table>
                     </div>
                     <div class="text-center">

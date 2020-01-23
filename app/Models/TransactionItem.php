@@ -39,4 +39,9 @@ class TransactionItem extends Model
     {
         return $this->belongsTo('App\Models\Transaction');
     }
+
+    public function product()
+    {
+        return $this->belongsTo('App\Models\Data\Product');
+    }
 }

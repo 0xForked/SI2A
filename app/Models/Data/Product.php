@@ -53,4 +53,9 @@ class Product extends Model
                     ->orderBy('created_at', 'desc')
                     ->limit(6);
     }
+
+    public function transaction_items()
+    {
+        return $this->hasMany('App\Models\TransactionItem');
+    }
 }

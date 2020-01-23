@@ -10,6 +10,8 @@ use App\Models\Data\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Data\ProductModifiedHistory;
+use App\Models\Transaction;
+use App\Models\TransactionItem;
 
 class ProductsController extends Controller
 {
@@ -56,7 +58,6 @@ class ProductsController extends Controller
      */
     public function show($id)
     {
-        // todo select transaction_item where id is product_id with transaction
         $product = Product::with('unit')
                         ->with(['subcategory' => function($query) {
                             $query->with('category');
@@ -64,7 +65,28 @@ class ProductsController extends Controller
                             $query->with('user:id,name');
                         }])->findOrFail($id);
 
-        return view('admin.item-mgmt.products.show', compact('product'));
+        $transaction_item_purchases = TransactionItem::where('product_id', $id)->with([
+            'transaction' => function($query) {
+                $query->where([
+                    'type' => 'purchase',
+                    'status' => 'COMPLETE'
+                ]);
+            }
+        ])->orderBy('created_at', 'desc')->limit(6)->get();
+
+        $transaction_item_selling = TransactionItem::where('product_id', $id)->with([
+            'transaction' => function($query) {
+                $query->where([
+                    'type' => 'selling',
+                    'status' => 'COMPLETE'
+                ]);
+            }
+        ])->orderBy('created_at', 'desc')->limit(6)->get();
+
+        return view(
+            'admin.item-mgmt.products.show',
+            compact('product', 'transaction_item_purchases', 'transaction_item_selling')
+        );
     }
 
     /**

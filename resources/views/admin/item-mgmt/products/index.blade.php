@@ -129,7 +129,3 @@
     </div>
 </div>
 @endsection
-
-{{-- @section('custom-include')
-@include('admin.product-mgmt.products.status')
-@endsection --}}
