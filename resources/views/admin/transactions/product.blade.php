@@ -4,7 +4,8 @@
         <div class="article-header">
             <div
                 class="article-image"
-                data-background="https://demo.getstisla.com/assets/img/news/img13.jpg"></div>
+                data-background="https://demo.getstisla.com/assets/img/news/img13.jpg">
+            </div>
             <div class="article-badge">
                 <div
                     class="article-badge-item bg-{{($product->stock > 0) ? 'success' : 'danger'}}"
@@ -42,6 +43,21 @@
                 </form>
                 @endif
             </div>
+        </div>
+        <div class="article-footer bg-whitesmoke p-2 text-center">
+            @php
+                \Carbon\Carbon::setLocale('id');
+                $carbonated_date = Carbon\Carbon::parse(date('d M Y', strtotime($product->expired_date)));
+                $diff_date = $carbonated_date->diffForHumans(Carbon\Carbon::now()->sub(1, 'day'));
+            @endphp
+            <span
+                    class="article-badge-item"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Kedaluwarsa : {{date('d M Y', strtotime($product->expired_date))}}"
+                >
+                    Kedaluwarsa : {{ change_date_string($diff_date) }}
+            </span>
         </div>
     </article>
 </div>

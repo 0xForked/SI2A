@@ -49,6 +49,18 @@ if (! function_exists('last_logged_in')) {
 }
 
 
+if (! function_exists('change_date_string')) {
+    function change_date_string($date)
+    {
+        return str_replace(
+            ["setelahnya"],
+            ["lagi"],
+            $date
+        );
+    }
+}
+
+
 if (! function_exists('current_greeting')) {
     // use this function to return greeting message on user
     // in realtime with Carbon date and time library

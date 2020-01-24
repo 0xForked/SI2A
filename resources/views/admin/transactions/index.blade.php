@@ -167,6 +167,17 @@
 
 @section('custom-script')
 @include('admin.transactions.script')
+<script>
+    $(document).ready(function() {
+        print = "{{Session::get('transaction_id')}}"
+        if (print) {
+            var win = window.open('{{url("admin/document/".Session::get("transaction_id"))}}', '_blank');
+            if (win) {
+                win.focus();
+            }
+        }
+    });
+</script>
 @endsection
 
 

@@ -11,7 +11,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    Tidak ada Transaksi pembelian terbaru!
+                    Tidak ada Transaksi terbaru!
                 </h5>
             </div>
             <div class="modal-footer">
@@ -23,7 +23,7 @@
                     Tutup
                 </button>
 
-                <a  href="{{ route('admin.transactions.open', 'purchase') }}"
+                <a  href="{{ route('admin.transactions.open', Request::segment(3)) }}"
                     onclick="event.preventDefault();
                     document.getElementById('open-transaction-form').submit();"
                     class="btn btn-primary"
@@ -33,7 +33,7 @@
 
                 <form
                     id="open-transaction-form"
-                    action="{{ route('admin.transactions.open', 'purchase') }}"
+                    action="{{ route('admin.transactions.open', Request::segment(3)) }}"
                     method="POST"
                     style="display: none;"
                 >

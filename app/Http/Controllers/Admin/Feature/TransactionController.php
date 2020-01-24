@@ -46,7 +46,7 @@ class TransactionController extends Controller
         ])->with('items')->latest('created_at')->first();
         $uncompleted_transactions = [];
         if ($transaction) {
-            $uncompleted_transactions = Transaction::where('status', 'UNCOMPLETED')
+            $uncompleted_transactions = Transaction::where(['type' => $type, 'status' => 'UNCOMPLETED'])
                                                     ->where('id', '!=' , $transaction->id)
                                                     ->get();
         }
@@ -65,10 +65,11 @@ class TransactionController extends Controller
     public function open(Request $request, $type)
     {
         //Purchase Order (PO) | Selling Order (SO)
-        $type = ($type == 'purchase') ? "PO" : "SO";
+        $type_short = ($type == 'purchase') ? "PO" : "SO";
         $data = [
-            'ref_no' => 'TRA'.date('ymd').$type.rand(1000, 9999),
+            'ref_no' => 'TRA'.date('ymd').$type_short.rand(1000, 9999),
             'recipient_id' => Auth::user()->id,
+            'type' => $type
         ];
         $validate = Transaction::where([
             'type' => $type,
@@ -88,8 +89,50 @@ class TransactionController extends Controller
 
     public function process(Request $request, $transaction_id)
     {
+        $this->validate($request, [
+            'letter_no' => 'required',
+            'notes' => 'required',
+            'site_default_people_name_assign' => 'required',
+            'site_default_people_nip_assign' => 'required',
+        ]);
+
         $transaction = Transaction::with('items')->findOrFail($transaction_id);
-        dd($transaction);
+
+        $data = [
+            'letter_no' => $request->letter_no,
+            'notes' => $request->notes,
+        ];
+
+        if ($transaction->type == "PURCHASE") {
+            $data['assign_by'] = json_encode([
+                'name' =>  $request->site_default_people_name_assign,
+                'nip' => $request->site_default_people_nip_assign
+            ]);
+        }
+
+        if ($transaction->type == "SELLING") {
+            if (isset($request->customer_select_radio)) {
+                $this->validate($request, ['customer_select' => 'required' ]);
+                $data['customer_id'] = $request->customer_select;
+            } else {
+                $this->validate($request, ['customer_name_input' => 'required' ]);
+            }
+
+            $data['assign_by'] = json_encode([
+                'name' =>  $request->site_default_people_name_assign,
+                'nip' => $request->site_default_people_nip_assign,
+                'customer' => (!isset($request->customer_select_radio)) ? $request->customer_name_input : ''
+            ]);
+        }
+
+        $transaction->update($data);
+        $this->updateStock($transaction);
+        $transaction->status = 'COMPLETE';
+        $transaction->save();
+        return Redirect::back()->with(
+            'transaction_id',
+            $transaction->id
+        );;
     }
 
     public function addItem(Request $request, $transaction_id, $product_id)
@@ -112,6 +155,10 @@ class TransactionController extends Controller
             'transaction_id' => $transaction->id,
             'product_id' => $product->id
         ])->first();
+        if ($transaction->type == 'SELLING') {
+            $product->stock = $product->stock - 1;
+            $product->save();
+        }
         if ($transaction_item) {
             $transaction_item->qty =  $transaction_item->qty + 1;
             $transaction_item->net = $transaction_item->net + $price;
@@ -139,7 +186,12 @@ class TransactionController extends Controller
 
     public function deleteItem(Request $request, $id)
     {
-        $transaction_item = TransactionItem::findOrFail($id);
+        $transaction_item = TransactionItem::with('transaction')->findOrFail($id);
+        $product = Product::findOrFail($transaction_item->product_id);
+        if ($transaction_item->transaction->type == 'SELLING') {
+            $product->stock = $product->stock + $transaction_item->qty;
+            $product->save();
+        }
         $transaction_item->delete();
         $this->calculateTransaction($transaction_item->transaction_id);
         return Redirect::back()->with(
@@ -150,12 +202,40 @@ class TransactionController extends Controller
 
     public function addItemQty(Request $request)
     {
-        $transaction_item = TransactionItem::findOrFail($request->item_id);
+        $transaction_item = TransactionItem::with('transaction')->findOrFail($request->item_id);
+
+        if ($request->add_qty <= 0) return Redirect::back()->with(
+            'error',
+            "failed add qty, number cannot be less than 1!"
+        );
+
+        if ($transaction_item->transaction->type == 'SELLING') {
+            $product = Product::findOrFail($transaction_item->product_id);
+            $product->stock = $product->stock + $transaction_item->qty;
+            $product->save();
+            $transaction_item->qty = 0;
+            $transaction_item->save();
+            if (($product->stock + $transaction_item->qty) < $request->add_qty) {
+                $product->stock = $product->stock - 1;
+                $product->save();
+                $transaction_item->qty = 1;
+                $transaction_item->save();
+                return Redirect::back()->with(
+                    'error',
+                    "insufficient stock, reset transaction item to 1!"
+                );
+            } else {
+                $product->stock = $product->stock - ($request->add_qty + $transaction_item->qty);
+                $product->save();
+            }
+        }
+
         $transaction_item->qty = $request->add_qty;
         $transaction_item->net = $transaction_item->price *  $request->add_qty;
         $transaction_item->total = $transaction_item->price *  $request->add_qty;
         $transaction_item->save();
         $this->calculateTransaction($transaction_item->transaction_id);
+
         return Redirect::back()->with(
             'success',
             "Added $transaction_item->name qty to cart!"
@@ -183,8 +263,15 @@ class TransactionController extends Controller
         $transaction->save();
     }
 
-    private function printReport()
+    private function updateStock($transaction)
     {
-        // todo print report after process
+        foreach ($transaction->items as $item) {
+            $product = Product::findOrFail($item->product_id);
+            if ($transaction->type == 'PURCHASE') {
+                $product->stock = $product->stock + $item->qty;
+                $product->save();
+            }
+        }
     }
+
 }

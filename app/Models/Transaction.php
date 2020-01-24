@@ -25,7 +25,8 @@ class Transaction extends Model
         'recipient_id',
         'customer_id',
         'type',
-        'status'
+        'status',
+        'assign_by'
     ];
 
     /**

@@ -100,7 +100,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 'transactions/item/qty',
                 'TransactionController@addItemQty'
             )->name('transactions.item.qty');
-
+            Route::post(
+                'transactions/process/{transaction_id}',
+                'TransactionController@process'
+            )->name('transactions.process');
 
             Route::get(
                 '/document/{transaction_id}',

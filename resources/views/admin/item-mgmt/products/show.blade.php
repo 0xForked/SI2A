@@ -116,12 +116,21 @@
                             <tr>
                                 <td>
                                     <b>
-                                        Status <br>
-                                        (Dalam transaksi)
+                                        Stok (Siap Jual)
                                     </b>
                                 </td>
                                 <td>
-                                    {{$product->status}}
+                                    <span class="text-{{($product->stock > app_settings()['site_min_stock_selling']->value) ? 'success' : 'danger'}}">{{$product->stock}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>
+                                        Status (Dalam transaksi)
+                                    </b>
+                                </td>
+                                <td>
+                                    <span class="text-{{($product->status == 'ACTIVE') ? 'success' : 'danger'}}">{{$product->status}}</span>
                                 </td>
                             </tr>
                         </table>
@@ -154,7 +163,6 @@
                             <tr>
                                 <th>Keterangan</th>
                             </tr>
-
                             @foreach ($product->modifiedHistories as $modifHistory)
                             <tr>
                                 <td>
@@ -165,7 +173,7 @@
                                 </td>
                             </tr>
                             @endforeach
-                            @if ($product->modifiedHistories->count() > 0)
+                            @if ($product->modifiedHistories->count() > count($product->modifiedHistories))
                             <tr>
                                 <td class="text-center" style ="word-break:break-all;">
                                    <span class="ml-4"> . . . . . . . . . </span>
@@ -182,9 +190,12 @@
                             </tr>
                         </table>
                     </div>
+                    {{-- @if ($product->modifiedHistories->count() > count($product->modifiedHistories))
                     <div class="text-center">
                         <a href="">Lihat Semua Riwayat</a>
                     </div>
+                    @endif --}}
+
                 </div>
             </div>
         </div>
@@ -200,39 +211,28 @@
                         <table class="table table-striped table-md">
                             <tr>
                                 <th>Keterangan</th>
-                                <th>Aksi</th>
                             </tr>
-                            @foreach ($transaction_item_purchases as $item)
-                                @if (!is_null($item->transaction))
+                            @foreach ($transaction_purchase as $transaction)
+                                @foreach ( $transaction->items as $item)
                                     <tr>
                                         <td>
                                             <b>
                                                 Barang masuk sejumalah {{$item->qty}}  {{$product->unit->description}} (<span class="text-success">Stok Bertambah</span>) <br>
                                                 pada tanggal : {{$item->transaction->updated_at}}<br>
-                                                nomor transaksi : {{$item->transaction->ref_no}}
+                                                nomor transaksi : <a href="">{{$item->transaction->ref_no}}</a>
 
                                             </b>
                                         </td>
-                                        <td>
-                                            <a href="http://">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                        </td>
                                     </tr>
-                                @else
-                                    <tr>
-                                        <td>
-                                            Tidak ada transaksi pembelian untuk produk ini
-                                        </td>
-                                    </tr>
-                                @endif
+                                @endforeach
                             @endforeach
-
                         </table>
                     </div>
+                    {{-- @if ($transaction_purchase->count() > 5)
                     <div class="text-center">
                         <a href="">Lihat Semua Riwayat</a>
                     </div>
+                    @endif --}}
                 </div>
             </div>
         </div>
@@ -248,42 +248,31 @@
                         <table class="table table-striped table-md">
                             <tr>
                                 <th>Keterangan</th>
-                                <th>Aksi</th>
                             </tr>
-                            @foreach ($transaction_item_selling as $item)
-                                @if (!is_null($item->transaction))
+                            @foreach ($transaction_selling as $transaction)
+                                @foreach ( $transaction->items as $item)
                                     <tr>
                                         <td>
                                             <b>
-                                                Barang masuk sejumalah {{$item->qty}} {{$product->unit->description}} (<span class="text-warning">Stok Berkurang</span>)<br>
+                                                Barang keluar sejumalah {{$item->qty}} {{$product->unit->description}} (<span class="text-warning">Stok Berkurang</span>)<br>
                                                 pada tanggal : {{$item->transaction->updated_at}}<br>
-                                                nomor transaksi : {{$item->transaction->ref_no}}
+                                                nomor transaksi : <a href="">{{$item->transaction->ref_no}}</a>
+
                                             </b>
                                         </td>
-                                        <td>
-                                            <a href="http://">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                        </td>
                                     </tr>
-                                @else
-                                    <tr>
-                                        <td>
-                                            Tidak ada transaksi penjualan untuk produk ini
-                                        </td>
-                                    </tr>
-                                @endif
+                                @endforeach
                             @endforeach
                         </table>
                     </div>
+                    {{-- @if ($transaction_selling->count() > 5)
                     <div class="text-center">
                         <a href="">Lihat Semua Riwayat</a>
                     </div>
+                    @endif --}}
                 </div>
             </div>
         </div>
-
     </div>
-
 </div>
 @endsection

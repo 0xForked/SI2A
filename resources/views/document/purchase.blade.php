@@ -108,7 +108,7 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-4 mt-4">
                     <span style="display:block;font-size:16px;font-weight:bold;">
-                        Yang Mengeluarkan
+                        Pemasok
                     </span>
                     <span style="display:block;font-size:16px;font-weight:bold;margin-top:80px">
                         .............................................................
@@ -167,4 +167,10 @@
             margin-top:auto;
         }
     </style>
+@endsection
+
+@section('custom-script')
+    <script>
+        window.onload=function(){window.print()}
+    </script>
 @endsection

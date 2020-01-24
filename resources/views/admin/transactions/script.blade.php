@@ -33,22 +33,30 @@
             }
         });
 
-        // $('#supplier_select_radio').click(function() {
-        //     if($(this).prop("checked") == true) {
-        //         $('#supplier_select_description').text('Diaktifkan')
-        //         $('#supplier_container').show();
-        //         $('#supplier_select').prop("disabled", false);
-        //         $('#supplier_name_container').hide();
-        //         $('#supplier_name_input').prop("disabled", true);
-        //     }
-        //     else if($(this).prop("checked") == false) {
-        //         $('#supplier_select_description').text('Dinonaktifkan')
-        //         $('#supplier_container').hide();
-        //         $('#supplier_select').prop("disabled", true);
-        //         $('#supplier_name_container').show();
-        //         $('#supplier_name_input').prop("disabled", false);
-        //     }
-        // });
+        $('#supplier_pejabat_radio').click(function() {
+            if($(this).prop("checked") == true) {
+                $('#supplier_pejabat_description').text('Perbaharui')
+                $('#site_default_people_name_assign').val('')
+                $('#site_default_people_nip_assign').val('')
+                $('#site_default_people_name_assign').attr('placeholder', 'Masukkan nama pejabat' );
+                $('#site_default_people_nip_assign').attr('placeholder', 'Masukkan nip pejabat' );
+                $("#site_default_people_name_assign").attr("readonly", false);
+                $("#site_default_people_nip_assign").attr("readonly", false);
+
+
+            }
+            else if($(this).prop("checked") == false) {
+                $('#supplier_pejabat_description').text('Default')
+
+                $('#site_default_people_name_assign').val('{{app_settings()['site_default_people_name_assign']->value}}')
+                $('#site_default_people_nip_assign').val('{{app_settings()['site_default_people_nip_assign']->value}}')
+                $('#site_default_people_name_assign').attr('placeholder', '' );
+                $('#site_default_people_nip_assign').attr('placeholder', '' );
+                $("#site_default_people_name_assign").attr("readonly", true);
+                $("#site_default_people_nip_assign").attr("readonly", true);
+
+            }
+        });
 
  	});
 

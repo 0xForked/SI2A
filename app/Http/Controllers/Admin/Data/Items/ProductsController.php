@@ -65,27 +65,44 @@ class ProductsController extends Controller
                             $query->with('user:id,name');
                         }])->findOrFail($id);
 
-        $transaction_item_purchases = TransactionItem::where('product_id', $id)->with([
-            'transaction' => function($query) {
-                $query->where([
-                    'type' => 'purchase',
-                    'status' => 'COMPLETE'
-                ]);
-            }
-        ])->orderBy('created_at', 'desc')->limit(6)->get();
+        // $transaction_item_purchases = TransactionItem::where('product_id', $id)->with([
+        //     'transaction' => function($query) {
+        //         $query->where([
+        //             'type' => 'PURCHASE',
+        //             'status' => 'COMPLETE'
+        //         ]);
+        //     }
+        // ])->orderBy('created_at', 'desc')->limit(6)->get();
 
-        $transaction_item_selling = TransactionItem::where('product_id', $id)->with([
-            'transaction' => function($query) {
-                $query->where([
-                    'type' => 'selling',
-                    'status' => 'COMPLETE'
-                ]);
-            }
-        ])->orderBy('created_at', 'desc')->limit(6)->get();
+        // $transaction_item_selling = TransactionItem::where('product_id', $id)->with([
+        //     'transaction' => function($query) {
+        //         $query->where([
+        //             'type' => 'SELLING',
+        //             'status' => 'COMPLETE'
+        //         ]);
+        //     }
+        // ])->orderBy('created_at', 'desc')->limit(6)->get();
+
+        $product_id = $product->id;
+        $transaction_purchase = Transaction::where([
+            'type' => 'PURCHASE',
+            'status' => 'COMPLETE'
+        ])->with(['items' => function($query) use ($product_id) {
+            $query->where('product_id', $product_id);
+        }])->orderBy('created_at', 'desc')->limit(6)->get();
+
+        $transaction_selling  = Transaction::where([
+            'type' => 'SELLING',
+            'status' => 'COMPLETE'
+        ])->with(['items' => function($query) use ($product_id) {
+            $query->where('product_id', $product_id);
+        }])->orderBy('created_at', 'desc')->limit(6)->get();
+
+        // dd($transaction_purchase);
 
         return view(
             'admin.item-mgmt.products.show',
-            compact('product', 'transaction_item_purchases', 'transaction_item_selling')
+            compact('product', 'transaction_purchase', 'transaction_selling')
         );
     }
 

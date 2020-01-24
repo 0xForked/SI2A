@@ -1,13 +1,14 @@
 ### TODO
 
 1. Feature:
-    a.
-    b.
+    - Report
+    - Dashboard
 2. Documentation
-    a. API (function, features, text(REST))
-    b. User Manual
-    c. Agreement
-    d. Policy
+    - API (function, features, text(REST))
+    - User Manual
+    - Agreement
+    - Policy
 3. Code
-    a. clean up (stage)
-    b. refactor (if needed)
+    - add repository pattern
+    - clean up (stage)
+    - refactor (if needed)
