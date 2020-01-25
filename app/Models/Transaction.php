@@ -26,7 +26,8 @@ class Transaction extends Model
         'customer_id',
         'type',
         'status',
-        'assign_by'
+        'assign_by',
+        'funding'
     ];
 
     /**
@@ -43,5 +44,10 @@ class Transaction extends Model
     public function items()
     {
         return $this->hasMany('App\Models\TransactionItem');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo('App\Models\Data\Customer');
     }
 }

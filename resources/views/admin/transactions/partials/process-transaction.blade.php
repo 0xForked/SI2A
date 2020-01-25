@@ -26,6 +26,10 @@
                         <label>Catatan</label>
                         <textarea class="form-control h-auto" name="notes"></textarea>
                     </div>
+                    <div class="form-group">
+                        <label>Sumber Dana</label>
+                        <input type="text" name="funding"  class="form-control">
+                    </div>
                     @if (Request::segment(3) == 'selling')
                         <div class="form-group">
                             <div class="control-label ">Data pembeli</div>

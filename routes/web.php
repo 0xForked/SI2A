@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -110,6 +112,30 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 'DocumentController@index'
             )->name('transaction.printout');
         });
+
+        Route::group([
+            'prefix'=>'reports',
+            'as' => 'reports.',
+            'namespace' => 'Report'
+        ], function () {
+            Route::group([
+                'prefix'=>'transactions',
+                'as' => 'transactions.',
+            ], function () {
+                Route::get('{type}', function ($type) {
+                    return redirect(
+                        "admin/reports/transactions/{$type}/" .
+                        Carbon::now()->startOfMonth()->format('Y-m-d')
+                        . '/' .
+                        Carbon::now()->format('Y-m-d')
+                        . '?status=COMPLETE&nominal=10000'
+                    ) ;
+                });
+
+                Route::get('{type}/{date_start}/{date_end}', 'TransactionController@index');
+            });
+        });
+
 
         Route::group([
             'namespace' => 'Data'

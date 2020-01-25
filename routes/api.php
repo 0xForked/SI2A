@@ -1,8 +1,9 @@
 <?php
 
+use App\Models\Transaction;
+use App\Models\Data\Product;
 use Illuminate\Http\Request;
 use App\Models\Data\Category;
-use App\Models\Data\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,13 @@ Route::group([
                                 ->paginate(20);
         }
         return response()->json($products);
+    });
+
+    Route::get('/transaction/{id}', function($id) {
+        $transactions = Transaction::with(['items' => function($query) {
+            $query->with('product');
+        }])->findOrFail($id);
+        return response()->json($transactions);
     });
 
 });

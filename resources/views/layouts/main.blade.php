@@ -78,6 +78,7 @@
         <script>
             $(document).ready(function() {
                 $('#loading').hide();
+                $("#flash_message").delay(5000).slideUp(300)
             });
         </script>
     </body>

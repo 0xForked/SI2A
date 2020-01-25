@@ -31,17 +31,17 @@
             </li>
 
             <li class="menu-header">LAPORAN</li>
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown {{ (Request::segment(2) == 'reports') ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown">
                     <i class="fas fa-file-invoice-dollar"></i>
                     <span>Transaksi</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class="">
-                        <a class="nav-link" href="">Pembelian</a>
+                    <li class="{{ (Request::segment(4) == 'purchase') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{url('/')}}/admin/reports/transactions/purchase">Pembelian</a>
                     </li>
-                    <li class="">
-                        <a class="nav-link" href="">Penjualan</a>
+                    <li class="{{ (Request::segment(4) == 'selling') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{url('/')}}/admin/reports/transactions/selling">Penjualan</a>
                     </li>
                 </ul>
             </li>

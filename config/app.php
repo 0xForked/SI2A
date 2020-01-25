@@ -187,6 +187,9 @@ return [
 
         Collective\Html\HtmlServiceProvider::class,
         Jaybizzle\LaravelCrawlerDetect\LaravelCrawlerDetectServiceProvider::class,
+
+        Barryvdh\DomPDF\ServiceProvider::class,
+
     ],
 
     /*
@@ -242,6 +245,8 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
 
         'Crawler'   => Jaybizzle\LaravelCrawlerDetect\Facades\LaravelCrawlerDetect::class,
+
+        'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],
 

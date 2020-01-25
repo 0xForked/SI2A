@@ -76,7 +76,6 @@
                                         <b>Serial</b>: {{ $product->sku }} <br>
                                         <b>Produksi</b>: {{ $product->bets_number }} <br>
                                         <b>Identitas</b>: {{ $product->marketing_authorization_number }} <br>
-
                                     </td>
                                     <td>{{ $product->name }}</td>
                                     <td>{{ $product->stock }}</td>

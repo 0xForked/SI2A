@@ -3,4 +3,5 @@
 !backups/
 !restore/
 !schema/
+!fonts/
 !.gitignore

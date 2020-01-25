@@ -2,7 +2,7 @@
     <h1>@yield('title')</h1>
     <div class="section-header-breadcrumb">
         @foreach (Request::segments() as $segment)
-            @if (!is_numeric($segment))
+            @if (!is_numeric($segment) && !is_date($segment))
                 <div class="breadcrumb-item">
                     @if ($loop->first)
                         <a href="{{ URL::to("/$segment") }}">{{ ucfirst($segment) }}</a>

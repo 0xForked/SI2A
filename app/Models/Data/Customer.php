@@ -29,4 +29,9 @@ class Customer extends Model
         'updated_at',
     ];
 
+    public function transactions()
+    {
+        return $this->hasMany('App\Models\Transaction');
+    }
+
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Feature;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use PDF;
 
 class DocumentController extends Controller
 {
@@ -26,9 +27,30 @@ class DocumentController extends Controller
      */
     public function index(Request $request, $transaction_id)
     {
-        $transaction = Transaction::with('items')->findOrFail($transaction_id);
-        if ($transaction->type == "PURCHASE")  return view('document.purchase', compact('transaction'));
-        if ($transaction->type == "SELLING")  return view('document.selling', compact('transaction'));
+        $transaction = Transaction::with(['items' => function($query) {
+            $query->with(['product' => function($query) {
+                $query->with('unit');
+            }]);
+        }])->with('customer')->findOrFail($transaction_id);
+
+        view()->share([
+            'transaction' => $transaction,
+        ]);
+        if ($transaction->type == "PURCHASE")  {
+            // $paper_size = array(0,0,360,360);
+            $pdf = PDF::loadView('document.purchase')->setPaper('A4','portrait');;
+            if ($request->has('download')) {
+                return $pdf->download();
+            }
+            return $pdf->stream();
+        }
+        if ($transaction->type == "SELLING")  {
+            $pdf = PDF::loadView('document.selling')->setPaper('A4','portrait');;
+            if ($request->has('download')) {
+                return $pdf->download();
+            }
+            return $pdf->stream();
+        }
     }
 
 }

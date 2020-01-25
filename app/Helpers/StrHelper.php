@@ -106,3 +106,10 @@ if (! function_exists('rupiah')) {
     }
 }
 
+
+if (! function_exists('is_date')) {
+    function is_date($str) {
+        $str = str_replace('/', '-', $str);
+        return is_numeric(strtotime($str));
+    }
+}

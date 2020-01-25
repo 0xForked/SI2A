@@ -34,6 +34,7 @@ class CreateTransactionsTable extends Migration
                 'UNCOMPLETED', // belum selesai - sudah dibuat dan ada item oredernya, tinggal proses bayar
                 'COMPLETE' // sudah selesai sampai proses pembayaran
             ])->default('UNCOMPLETED');
+            $table->text('funding')->nullable();
             $table->text('assign_by')->nullable(); // json_encode name and nip
             $table->timestamps();
 

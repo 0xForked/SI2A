@@ -94,6 +94,7 @@ class TransactionController extends Controller
             'notes' => 'required',
             'site_default_people_name_assign' => 'required',
             'site_default_people_nip_assign' => 'required',
+            'funding' => 'required'
         ]);
 
         $transaction = Transaction::with('items')->findOrFail($transaction_id);
@@ -101,6 +102,7 @@ class TransactionController extends Controller
         $data = [
             'letter_no' => $request->letter_no,
             'notes' => $request->notes,
+            'funding' => $request->funding
         ];
 
         if ($transaction->type == "PURCHASE") {
