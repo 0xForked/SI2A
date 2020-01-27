@@ -60,7 +60,8 @@ class SettingController extends Controller
             'site_title',
             'site_description',
             'site_logo',
-            'site_favicon'
+            'site_favicon',
+            'site_analytics_id'
         );
         foreach ($data as $key => $value) {
             $setting = Setting::where('key', $key)->first();
@@ -177,6 +178,10 @@ class SettingController extends Controller
         $data = (Object)$request->only(
             'site_tax_purchase',
             'site_tax_selling',
+            'site_min_stock_selling',
+            'site_min_day_expired_selling',
+            'site_default_people_name_assign',
+            'site_default_people_nip_assign'
         );
 
         foreach ($data as $key => $value) {
