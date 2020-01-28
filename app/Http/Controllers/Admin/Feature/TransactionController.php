@@ -91,7 +91,7 @@ class TransactionController extends Controller
     {
         $this->validate($request, [
             'letter_no' => 'required',
-            'notes' => 'required',
+            'note' => 'required',
             'site_default_people_name_assign' => 'required',
             'site_default_people_nip_assign' => 'required',
             'funding' => 'required'
@@ -101,7 +101,7 @@ class TransactionController extends Controller
 
         $data = [
             'letter_no' => $request->letter_no,
-            'notes' => $request->notes,
+            'note' => $request->note,
             'funding' => $request->funding
         ];
 

@@ -121,6 +121,11 @@
         @if ($transactions->count() > 0)
         <div class="col-12 col-md-4">
             <div class="card">
+                <div class="card-footer">
+                    <h4>Daftar Transaksi</h4>
+                    <p class="text-info">Silahkan pilih dan klik salah satu transaksi dibawah ini!</p>
+                    <hr>
+                </div>
                 <div class="card-body">
                     <ul class="nav nav-pills flex-column" id="pills-tab" role="tablist">
                         @foreach ($transactions as $transaction)

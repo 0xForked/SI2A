@@ -24,7 +24,7 @@
                     </div>
                     <div class="form-group">
                         <label>Catatan</label>
-                        <textarea class="form-control h-auto" name="notes"></textarea>
+                        <textarea class="form-control h-auto" name="note"></textarea>
                     </div>
                     <div class="form-group">
                         <label>Sumber Dana</label>
