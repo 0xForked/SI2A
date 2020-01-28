@@ -5,7 +5,7 @@
 @section('content')
 <div class="section-body">
     <h2 class="section-title">Laporan Transaksi {{$type}}</h2>
-    <p class="section-lead">Daftar Laporan Transaksi {{$type}}.</p>
+    <p class="section-lead">Daftar Transaksi {{$type}}.</p>
     @include('layouts._part.flash')
 
     <div class="row">
@@ -160,6 +160,7 @@
             <div class="card">
                 <div class="card-footer">
                     <h4>Transaksi : <span id="transaction_id">Tidak ada yang dipilih</span></h4>
+                    <table id="transaction_detail"></table>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive" id="transaction_item" style="display:none">
@@ -170,10 +171,14 @@
                                     <th>Kode</th>
                                     <th>Nama</th>
                                     <th>Qty</th>
+                                    <th>Harga</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
                         </table>
+                    </div>
+                    <div class="valuable float-right">
+                        <h5 id="transaction_total"></h5>
                     </div>
                 </div>
                 <div class="card-footer bg-whitesmoke" id="detail_table_transaction_footer"></div>
@@ -208,7 +213,32 @@
                 $("#table_transaction_item").find('tbody').empty();
                 $("#detail_table_transaction_footer").empty();
 
+                $("#transaction_detail").empty();
                 $('#transaction_id').text(data.ref_no)
+                var item_loop = `
+                        <tr>
+                            <td>Waktu Transaksi</td>
+                            <td>: `+data.updated_at+`</td>
+                        </tr>
+                        <tr>
+                            <td>Nomor Surat</td>
+                            <td>: `+data.letter_no+`</td>
+                        </tr>
+                        <tr>
+                            <td>Nomor Agenda</td>
+                            <td>: -</td>
+                        </tr>
+                        <tr>
+                            <td>Sumber Dana</td>
+                            <td>: `+data.funding+`</td>
+                        </tr>
+                        <tr>
+                            <td>Catatan</td>
+                            <td>: `+data.note+`</td>
+                        </tr>
+                   `
+                $("#transaction_detail").append(item_loop).trigger('change');
+
                 $('#loading').hide();
                 $('#transaction_item').show();
                 data.items.forEach((item, i) => {
@@ -222,6 +252,7 @@
                             </td>
                             <td>`+item.name+`</td>
                             <td>`+item.qty+`</td>
+                            <td>`+formatRupiah(item.price)+`</td>
                         </tr>
                    `
                    $("#table_transaction_item").find('tbody').append(item_loop).trigger('change');
@@ -244,9 +275,24 @@
                     </a>
                 `
                 $('#detail_table_transaction_footer').append(button).trigger('change')
+                $('#transaction_total').text('Total : '+formatRupiah(data.total)+',-' )
             }).fail(function () {
                 alert('Transaction could not be loaded.');
             });
         }
+
+        function formatRupiah(angka){
+			var number_string = angka.toString().replace(/[^,\d]/g, '').toString(),
+			split   		= number_string.split(','),
+			sisa     		= split[0].length % 3,
+			rupiah     		= split[0].substr(0, sisa),
+			ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+			if(ribuan){
+				separator = sisa ? '.' : '';
+				rupiah += separator + ribuan.join('.');
+			}
+			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+			return (rupiah ? 'Rp. ' + rupiah : '');
+		}
     </script>
 @endsection

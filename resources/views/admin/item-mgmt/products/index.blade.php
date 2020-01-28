@@ -116,10 +116,10 @@
                         </table>
                     </div>
                 </div>
-                <div class="card-footer bg-whitesmoke text-center">
+                <div class="card-footer text-center">
                     <nav class="d-inline-block">
                         <ul class="pagination mb-0">
-                            {{ $products->links() }}
+                            {{ $products->appends(request()->query())->links() }}
                         </ul>
                     </nav>
                 </div>
@@ -127,4 +127,14 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('custom-script')
+<script type="text/javascript">
+    $('input[type=search]').on('search', function () {
+        if($(this).val().length < 1){
+            window.location='{{ route('admin.items.products.store') }}'
+        }
+    });
+</script>
 @endsection

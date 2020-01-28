@@ -31,7 +31,7 @@
             </li>
 
             <li class="menu-header">LAPORAN</li>
-            <li class="nav-item dropdown {{ (Request::segment(2) == 'reports') ? 'active' : '' }}">
+            <li class="nav-item dropdown {{ (Request::segment(3) == 'transactions') ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown">
                     <i class="fas fa-file-invoice-dollar"></i>
                     <span>Transaksi</span>
@@ -45,17 +45,17 @@
                     </li>
                 </ul>
             </li>
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown {{ (Request::segment(3) == 'items') ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown">
                     <i class="fas fa-window-restore"></i>
                     <span>Barang</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class="">
-                        <a class="nav-link" href="">Stock</a>
+                    <li class="{{ (Request::segment(4) == 'stock') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{url('/')}}/admin/reports/items/stock">Stok</a>
                     </li>
-                    <li class="">
-                        <a class="nav-link" href="">Kadaluarsa</a>
+                    <li class="{{ (Request::segment(4) == 'expired') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{url('/')}}/admin/reports/items/expired">kedaluwarsa</a>
                     </li>
                 </ul>
             </li>

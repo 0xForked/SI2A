@@ -1,8 +1,10 @@
 ### TODO
 
 1. Feature:
-    - Report
+    - Report (Items : Print And Download Document [Stock and Expired Item])
     - Dashboard
+    - Warehouse (UI)
+    - Cashier (UI)
 2. Documentation
     - API (function, features, text(REST))
     - User Manual

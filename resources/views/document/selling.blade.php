@@ -62,7 +62,7 @@
                                     : {{$transaction->letter_no}}
                                 </td>
                                 <td style="padding-top:20px;padding-left:70px">
-                                    Tgl. Surat: {{ date('d/m/Y') }}
+                                    Tgl. Surat: {{ date('d/m/Y', strtotime($transaction->updated_at)) }}
                                 </td>
                                 <td style="padding-top:20px;padding-left:100px">
                                     No. Agenda : -

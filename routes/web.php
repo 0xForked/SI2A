@@ -134,6 +134,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
                 Route::get('{type}/{date_start}/{date_end}', 'TransactionController@index');
             });
+
+            Route::group([
+                'prefix'=>'items',
+                'as' => 'items.',
+            ], function () {
+                // Route::get('{type}', function ($type) {
+                //     return redirect(
+                //         "admin/reports/items/{$type}");
+                // });
+
+                Route::get('{type}', 'ItemController@index')->name('list');
+            });
         });
 
 
