@@ -14,3 +14,8 @@
     - add repository pattern
     - clean up (stage)
     - refactor (if needed)
+
+need php7.*-intl
+
+setting column-statistics=0
+

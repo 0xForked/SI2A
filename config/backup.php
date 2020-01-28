@@ -130,14 +130,9 @@ return [
          */
         'notifiable' => \Spatie\Backup\Notifications\Notifiable::class,
 
-        'mail' => [
-            'to' => 'your@example.com',
-
-            'from' => [
-                'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-                'name' => env('MAIL_FROM_NAME', 'Example'),
-            ],
-        ],
+        // 'mail' => [
+        //   'to' => 'aasumitro@gmail.com',
+        // ],
 
         'slack' => [
             'webhook_url' => '',
