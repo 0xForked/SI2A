@@ -106,7 +106,7 @@
                     </table>
                 </div>
             </div>
-            <div class="section-footer" style="margin-top:100px">
+            <div class="section-footer" style="margin-top:30px">
                 <table style="font-size:11px;">
                     <tr>
                         <td style="padding-left:80px">

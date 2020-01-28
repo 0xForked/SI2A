@@ -35,11 +35,11 @@ class TransactionController extends Controller
         $today = date('Y-m-d');
         $products = [];
         if ($type == 'purchase')
-            $products = Product::paginate(2);
+            $products = Product::paginate(9);
         if ($type == 'selling')
             $products = Product::where('stock', '>', 0)
                                 ->where('expired_date', '>=', $today)
-                                ->paginate(2);
+                                ->paginate(9);
         $transaction = Transaction::where([
             'type' => $type,
             'status' => 'UNCOMPLETED'
